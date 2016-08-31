@@ -1,0 +1,158 @@
+/*Main Definitions*/
+
+
+/*
+* {
+    border: 1px solid red;
+}*/
+
+body {
+    background-image: url("images/635651375730025187-USP-NFL-Super-Bowl-XLIX-Stadium-Views.jpg");
+    background-repeat: no-repeat;
+    background-size: auto;
+}
+
+html {
+    font-family: 'Graduate', cursive;
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: 30px;
+    color: white;
+}
+
+h2 {
+    color: white;
+    font-size: 20px;
+    display: inline-block;
+}
+
+section.main {
+    text-align: center;
+}
+
+div.helmet {
+    display: inline-block;
+    width: 20%;
+    text-align: center;
+}
+
+div.chat {
+    width: 20%;
+    height: 100%;
+    float: right;
+    background: white;
+    border: 1px ridge black;
+}
+
+div.radio {
+    text-align: center;
+}
+
+div.row {
+    display: inline-block;
+    width: 100%;
+    margin: auto;
+}
+
+div.ticker {
+    align-content: center;
+    display: inherit;
+    width: 70%;
+    background: white;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border: 1px ridge black;
+}
+
+div.nav {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 10px;
+    width: 100%;
+    text-align: center;
+}
+
+div.position {
+    border: 2px ridge darkgray;
+    display: inline-block;
+    width: 75%;
+    padding: 5px;
+}
+
+div.teaminfo {
+    align-content: center;
+    width: 70%;
+    display: inline-block;
+    background: lightgray;
+}
+
+
+/*ID Rules*/
+
+#login {
+    width: 50%;
+    border-radius: 3px;
+    background: lightgray;
+    padding: 15px;
+    margin: auto;
+    overflow-wrap: normal;
+}
+
+
+/*CLASS RULES*/
+
+.small {
+    width: 10%;
+    height: auto;
+}
+
+.helmet_size {
+    width: 60%;
+    height: auto;
+}
+
+img.helmet_logo {
+    width: 5%;
+    height: auto;
+    vertical-align: middle;
+}
+
+.radio {
+    display: inline-block;
+    width: 150px;
+}
+
+
+/*SECTIONS*/
+
+
+/*FIRST PAGE, LOGIN*/
+
+.intro {
+    text-align: center;
+    margin: auto;
+    width: 80%;
+    display: none;
+}
+
+
+/*TEAM BUILDER PAGE - 2ND PAGE*/
+
+.builder {
+    display: inline-block;
+    text-align: center;
+    width: 80%;
+    display: none;
+}
+
+
+/*MAIN DISPLAY PAGE*/
+
+.main {
+    display: inline-block;
+}
+
+
+/*END SECTIONS*/
