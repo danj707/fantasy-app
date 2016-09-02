@@ -4,7 +4,7 @@
   "description": "## Utilizes the following: * Node.js, express, mongodb, JavaScript, Jquery, HTML5,CSS3 * Create a front end for building a personal fantasy football team * Utilize external API queries for actual player data * Provide API endpoints for external querying of DB * Provide authentication for users of app * Provide chat functionality between users * Display a 'news ticker' of external FF news * Make it fun and visually appealing",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",

@@ -17,9 +17,9 @@ chai.use(chaiHttp);
 describe('Fantasy App', function() {
     before(function(done) {
         server.runServer(function() {
-            Team.create({name: 'The Killers'},
-                        {name: 'Bobs Savages'},
-                        {name: 'NY Destroyers'}, function() {
+            Team.create({team_id:1,name:'The Killers'},
+                        {team_id:2,name:'Bobs Savages'},
+                        {team_id:3,name:'NY Destroyers'}, function() {
                 done();
             });
         });
@@ -46,13 +46,13 @@ describe('Fantasy App', function() {
             });
     });
     
-        it('should edit a FF /team on PUT', function(done) {
+        it('should edit a FF teamname /team/name on PUT', function(done) {
         chai.request(app)
-            .put('/team/:name')
-            .send({"name":"The Killers","update":"SF Chickens"})
+            .put('/teams')
+            .send({"team_id":'1',"update":"The chickens"})
             .end(function(err,res) {
                 should.equal(err, null);
-                res.body[0].name.should.equal('SF Chickens');
+                res.body.name.should.equal('The Killers');
                 res.should.have.status(201);
                 res.should.be.json;
                 done();

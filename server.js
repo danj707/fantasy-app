@@ -56,6 +56,7 @@ app.get('/teams', function(req, res) {
 //POST route, creates the new item in the DB
 app.post('/teams', function(req, res) {
     Team.create({
+        team_id: req.body.team_id,
         name: req.body.name
     }, function(err, item) {
         if (err) {
@@ -65,6 +66,20 @@ app.post('/teams', function(req, res) {
         }
         res.status(201).json(item);
     });
+});
+
+app.put('/teams', function(req,res) {
+    var team_id = {team_id:req.body.team_id};
+    var update = {name:req.body.name};
+    console.log(team_id,update);
+   Team.findOneAndUpdate(team_id,update, function(err,items) {
+         if (err) {
+             return res.status(500).json({
+                 message: 'Internal Server Error'
+             });
+         }
+         res.status(201).json(items);
+   });
 });
 
 ///////////////USERS///////////////
@@ -105,7 +120,7 @@ app.post('/users/:create', function(req, res) {
 
 /////////////PLAYERS//////////////////
 //PUT route, updates the item by id from the DB
-app.put('/teams/:id', function(req,res) {
+app.put('/players/:id', function(req,res) {
     var id = {_id:req.body._id};
     var update = {name:req.body.name};
    Team.findOneAndUpdate(id,update, function(err,items) {
@@ -119,7 +134,7 @@ app.put('/teams/:id', function(req,res) {
 });
 
 //DELETE route, removes the item by name from the DB
-app.delete('/items/:id', function(req,res) {
+app.delete('/players/:id', function(req,res) {
    Team.remove({
        _id: req.params.id
    }, function(err,item) {
