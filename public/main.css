@@ -1,10 +1,10 @@
 /*Main Definitions*/
 
 
-/*
-* {
-    border: 1px solid red;
-}*/
+
+/** {*/
+/*    border: 1px solid red;*/
+/*}*/
 
 body {
     background-image: url("images/bg.jpg");
@@ -100,6 +100,14 @@ div.teaminfo {
     overflow-wrap: normal;
 }
 
+#new_user {
+    width: 50%;
+    border-radius: 3px;
+    background: lightgray;
+    padding: 15px;
+    margin: auto;
+    overflow-wrap: normal;
+}
 
 /*CLASS RULES*/
 

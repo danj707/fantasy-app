@@ -5,10 +5,12 @@ var app = express();
 
 var config=require('./config');
 
+//require schemas for team, user and players
 var Team = require('./models/team');
 var User = require('./models/user');
 var Players = require('./models/players');
 
+//serves static files and uses json bodyparser
 app.use(express.static('public'));
 app.use(bodyParser.json());
 
@@ -35,12 +37,9 @@ if (require.main === module) {
     });
 };
 
-//require the models object
-var Team = require('./models/team');
-var User = require('./models/user');
-var Player = require('./models/players');
-
-/////////////TEAMS/////////////////
+////////////////////////////////////////////////////
+/////////////TEAMS//////////////////////////////////
+////////////////////////////////////////////////////
 //GET route, displays a list of all the items in DB
 app.get('/teams', function(req, res) {
     Team.find(function(err, items) {
@@ -53,13 +52,41 @@ app.get('/teams', function(req, res) {
     });
 });
 
-//POST route, creates the new item in the DB
+
+//GET A TEAM BY NAME, returns team object
+app.get('/teams/:name', function(req, res) {
+    var name = req.params.name;
+    Team.findOne({
+        name:name    
+    }, function(err, items) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        res.json(items);
+    });
+});
+
+///////////CREATES NEW TEAM IN DB
 app.post('/teams', function(req, res) {
     Team.create({
-        team_id: req.body.team_id,
-        name: req.body.name
+        team_id: req.query.team_id,
+        team_name: req.query.team_name,
+        user_name: req.query.user_name,
+        user_id:req.query.user_id,
+        helmet:req.query.helmet,
+        QB:req.query.QB,
+        RB1:req.query.RB1,
+        RB2:req.query.RB2,
+        WR1:req.query.WR1,
+        WR2:req.query.WR2,
+        WR3:req.query.WR3,
+        K:req.query.K,
+        DEF:req.query.DEF
     }, function(err, item) {
         if (err) {
+            console.log(err);
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
@@ -68,6 +95,7 @@ app.post('/teams', function(req, res) {
     });
 });
 
+///////////////UPDATES TEAM NAME
 app.put('/teams', function(req,res) {
     var team_id = {team_id:req.body.team_id};
     var update = {name:req.body.name};
@@ -82,7 +110,23 @@ app.put('/teams', function(req,res) {
    });
 });
 
-///////////////USERS///////////////
+//REMOVES USER BY ID FROM DB
+app.delete('/teams/:id', function(req,res) {
+   Team.remove({
+       _id: req.params.id
+   }, function(err,item) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        res.status(201).json(item);
+   });
+});
+
+////////////////////////////////////////////////////////
+///////////////USERS////////////////////////////////////
+////////////////////////////////////////////////////////
 //GET route, displays a list of all the items in DB
 app.get('/users', function(req, res) {
     User.find(function(err, items) {
@@ -95,31 +139,92 @@ app.get('/users', function(req, res) {
     });
 });
 
-//POST route, creates the new item in the DB
-app.post('/users/:create', function(req, res) {
+//LOGIN OF A SINGLE USER BY USERNAME AND PASSWORD FROM LOGIN PAGE
+app.get('/login', function(req, res) {
+    var uname = req.query.username;
+    var pwd = req.query.password;
+    User.findOne({
+        username:uname,
+        password:pwd
+    }, function(err, items) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        if(!items) {
+            res.json({
+                message: 'Failure',
+                team:false
+            });
+        } else {
+            if(items.team_name) {
+                res.json({
+                    message: 'Success',
+                    team:true,
+                    team_name:items.team_name,
+                });
+            } else {
+                res.json({
+                    message: 'Success',
+                    team:false
+                });
+            }
+        }
+    });
+});
 
-        var password = req.params.password;
-        var team_name = req.params.team_name;
-        var user_id = req.params.user_id;
-        console.log(req.query);
+////////UPDATES USER NAME
+app.put('/users', function(req,res) {
+    var user_id = {user_id:req.body.user_id};
+    var username = {username:req.body.username};
+   User.findOneAndUpdate(user_id,username, function(err,items) {
+         if (err) {
+             return res.status(500).json({
+                 message: 'Internal Server Error'
+             });
+         }
+         res.status(201).json(items);
+   });
+});
 
-    User.create({
-        username: req.query.user_name,
-        password: req.query.password,
-        team_name: req.query.team_name,
-        user_id: req.query.user_id
-    }, function(err, item) {
+//REMOVES USER BY ID FROM DB
+app.delete('/users/:id', function(req,res) {
+   User.remove({
+       _id: req.params.id
+   }, function(err,item) {
         if (err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
         }
         res.status(201).json(item);
+   });
+});
+
+//CREATES NEW USER IN DB, FROM NEW USER/LOGIN FORM
+app.post('/users/create', function(req, res) {
+    User.create({
+        username: req.query.username,
+        password: req.query.password,
+    }, function(err, item) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        if(item) {
+            res.json({
+                message: 'Success',
+            });
+        }
     });
 });
 
-/////////////PLAYERS//////////////////
-//PUT route, updates the item by id from the DB
+////////////////////////////////////////////////////////////
+/////////////PLAYERS///////////////////////////////////////
+///////////////////////////////////////////////////////////
+//PUT route, updates the player by id from the DB
 app.put('/players/:id', function(req,res) {
     var id = {_id:req.body._id};
     var update = {name:req.body.name};
@@ -133,7 +238,7 @@ app.put('/players/:id', function(req,res) {
    });
 });
 
-//DELETE route, removes the item by name from the DB
+//DELETE route, removes the player by name from the DB
 app.delete('/players/:id', function(req,res) {
    Team.remove({
        _id: req.params.id
@@ -146,7 +251,6 @@ app.delete('/players/:id', function(req,res) {
         res.status(201).json(item);
    });
 });
-
 
 
 app.use('*', function(req, res) {

@@ -12,7 +12,8 @@
         <h1>Welcome to the NFL Fantasy Team Builder</h1>
         <img src="images/NFL_Draft.png">
 
-        <form id="login" action="log">
+        <form id="login" action="login">
+                    Returning User:
             <p>
                 <label id="username">Username:
                     <input type="text" name="username" id="username" placeholder="username" required></input>
@@ -24,11 +25,28 @@
                     <input type="password" name="password" id="password" placeholder="password" required></input>
                 </label>
             </p>
-            
-            <p class="error"></p>
-
-            <input type="submit" value="Login"></input>
+            <p class="login_error"></p>
+            <input type="submit" id="login" value="Login"></input>
         </form>
+    
+           <hr>
+        <form id="new_user" action="login">
+            New FF User:
+            <p>
+                <label id="username">Username:
+                    <input type="text" name="new_username" id="new_username" placeholder="username" required></input>
+                </label>
+            </p>
+
+            <p>
+                <label id="username">Password:
+                    <input type="password" name="new_password" id="new_password" placeholder="password" required></input>
+                </label>
+            </p>
+            <p class="newuser_error"></p>
+            <input type="submit" id="new_user" value="New Account"></input>
+        </form>
+        
     </section>
     <!--end of login page section-->
 
@@ -112,17 +130,14 @@
         </div>
 
         <div class="teaminfo">
-            <h1>My team name - Current Roster</h1>
+            <h1 class="teamname">My team name</h1>
 
-
-            <div class="position">
+            <div class="qb_position">
                 <p>Quarterback</p>
-                <p>Name: Aaron Rogers</p>
-                <p>Team: Green Bay Packers</p>
-                <p>Position: Quarterback</p>
-                <p>Number: 18</p>
-                <p>Age: 35</p>
-                <p>QBR: 110.5</p>
+                <p id="qb_name">Name:</p>
+                <p id="qb_team">Team:</p>
+                <p id="qb_jersey">Jersey:</p>
+                <p id="qb_qbr">QBR:</p>
 
                 <form>
                     <input type="submit" value="Edit/Add">
@@ -131,44 +146,77 @@
 
             <div class="chat">Sports Chat:</div>
 
-            <div class="position">Running Back
-
+            <div class="rb_position">
+                <p>Running Back #1</p>
+                <p id="rb1_name">Name:</p>
+                <p id="rb1_team">Team:</p>
+                <p id="rb1_jersey">Jersey:</p>
+                <p id="rb1_ypc">YPC:</p>
+                
                 <form>
                     <input type="submit" value="Edit/Add">
                 </form>
             </div>
 
-            <div class="position">Running Back
+            <div class="rb_position">
+                <p>Running Back #2</p>
+                <p id="rb2_name">Name:</p>
+                <p id="rb2_team">Team:</p>
+                <p id="rb2_jersey">Jersey:</p>
+                <p id="rb2_ypc">YPC:</p>
+                
                 <form>
                     <input type="submit" value="Edit/Add">
                 </form>
             </div>
 
-            <div class="position">Wide Receiver
+            <div class="rb_position">
+                <p>Wide Receiver #1</p>
+                <p id="wr1_name">Name:</p>
+                <p id="wr1_team">Team:</p>
+                <p id="wr1_jersey">Jersey:</p>
+                <p id="wr1_qbr">QBR:</p>
+                
                 <form>
                     <input type="submit" value="Edit/Add">
                 </form>
             </div>
 
-            <div class="position">Wide Receiver
+            <div class="rb_position">
+                <p>Wide Receiver #2</p>
+                <p id="wr2_name">Name:</p>
+                <p id="wr2_team">Team:</p>
+                <p id="wr2_jersey">Jersey:</p>
+                <p id="wr2_qbr">QBR:</p>
+                
                 <form>
                     <input type="submit" value="Edit/Add">
                 </form>
             </div>
 
-            <div class="position">Wide Receiver
+            <div class="rb_position">
+                <p>Wide Receiver #3</p>
+                <p id="wr3_name">Name:</p>
+                <p id="wr3_team">Team:</p>
+                <p id="wr3_jersey">Jersey:</p>
+                <p id="wr3_qbr">QBR:</p>
+                
                 <form>
                     <input type="submit" value="Edit/Add">
                 </form>
             </div>
 
-            <div class="position">Kicker
+            <div class="k_position">Kicker
+                <p>Kicker</p>
+                <p id="k_name">Name:</p>
                 <form>
                     <input type="submit" value="Edit/Add">
                 </form>
             </div>
 
-            <div class="position">Defense
+            <div class="def_position">Defense
+                <p>Defense</p>
+                <p id="defense"></p>
                 <form>
                     <input type="submit" value="Edit/Add">
                 </form>

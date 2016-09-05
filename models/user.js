@@ -12,11 +12,6 @@ var UserSchema = new mongoose.Schema({
     },
     team_name: {
         type: String,
-        required: true
-    },
-    user_id: {
-        type: Number,
-        required: true
     }
 });
 
