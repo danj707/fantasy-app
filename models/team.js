@@ -1,11 +1,6 @@
 var mongoose = require('mongoose');
 
 var TeamSchema = new mongoose.Schema({
-    team_id: {
-        type: Number,
-        required: true,
-        unique:true
-    },
     team_name: { 
         type: String,
         required: true 
@@ -19,7 +14,7 @@ var TeamSchema = new mongoose.Schema({
         unique:true
     },
     helmet: {
-        type:Number
+        type:String
     },
     QB: {
         type: String,

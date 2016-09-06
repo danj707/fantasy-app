@@ -1,75 +1,13 @@
 'use strict';
 
+/* global $ */
 
-////////MOCK DATA, REPLACE WITH API DATA EVENTUALLY
+var user_name;
+var user_id;
+var team_name;
+var team_id;
 
-var MOCK_TEAM = {
-    team_id:1,
-    team_name:'Raiders',
-    user_name:'BobbyJoe',
-    user_id:'1',
-    helmet:2,
-    quarterback:'Aaron Rodgers',
-    runningback:'Adrian Peterson',
-    runningback2:'Ezekiel Edwards',
-    wide_receiver:'Odell Beckham Jr.',
-    wide_receiver2:'Antonio Brown',
-    wide_receiver3:'Julio Jones',
-    kicker:'Stephen Gostkowski',
-    defense:'Patriots'
-}
-
-var MOCK_PLAYERS = {
-    'quarterback':[
-        {
-            'pid':123,
-            'name':'Aaron Rodgers',
-            'team':'Green Bay Packers',
-            'jersey':10,
-            'qbr':102.5
-        },
-        {
-            'pid':124,
-            'name':'Tom Brady',
-            'team':'Patriots',
-            'jersey':8,
-            'qbr':101.6
-        },       
-        {
-            'pid':125,
-            'name':'Cam Newton',
-            'team':'Panthers',
-            'jersey':6,
-            'qbr':110.5
-        }
-        ],
-    'wr':[
-        {
-            'pid':167,
-            'name':'Odell Beckham',
-            'team':'New York Giants',
-            'jersey':5,
-            'YAC':12
-        },
-        {
-            'pid':468,
-            'name':'Antonio Brown',
-            'team':'Pittsburg Steelers',
-            'jersey':8,
-            'YAC':15
-        },       
-        {
-            'pid':335,
-            'name':'Julio Jones',
-            'team':'Tampa Bay Bucs',
-            'jersey':6,
-            'YAC':16
-        }
-        ],
-        
-}
-
-//
+//API CALL TO ENDPOINT FOR USERNAME/PW LOGIN
 function loginUser(username,password) {
     //check username and password
     $('p.error').empty();
@@ -84,27 +22,26 @@ function loginUser(username,password) {
             dataType:'json',
         })
         .done(function (result) { //this waits for the ajax to return with a succesful promise object
-            if(result.message == 'Success') {
-                if(result.team) {
+            user_name = result.username;
+            user_id=result._id;
+            
+            if(result.team_name) {
                     //has a team, go to mainpage
-                    var teamname = result.team_name;
-                    mainDisplay(teamname);
-                } else {
+                    team_name = result.team_name;
+                    mainDisplay(result);
+            } else {
                     //doesn't have a team, go to builder
-                    genBuilder();
-                }
-            } else if (result.message == 'Failure') {
-                $('p.login_error').text("We're sorry, there was an error.  Check your username and password");
+                    genBuilder(result);
             }
         })
         .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
-                $('p.login_error').text("We're sorry, that username might be taken.  Try another username.");
+                $('p.login_error').text("We're sorry, that un/pw combination was incorrect.");
         });
 }
 
+//API CALL TO ENDPOINT FOR NEW USER CREATION
 function newUser(username,password) {
     $('p.error').empty();
-    console.log(username,password + "new user req");
     $.ajax({
             type:"POST",
             url:"https://fantasy-app-danj707.c9users.io/users/create?username=" + username + "&password=" + password,
@@ -114,7 +51,7 @@ function newUser(username,password) {
             console.log("DB add sent!");
             console.log(result);
             if(result.message == 'Success') {
-                genBuilder();
+                genBuilder(username);
             } else if (result.message == 'Failure') {
                 $('p.newuser_error').text("Sorry, couldn't create that account, try another username");
             }
@@ -124,6 +61,7 @@ function newUser(username,password) {
         });
 }
 
+//API CALL TO ENDPOINT FOR GET TEAM DATA BY TEAM NAME
 function getTeam(teamname) {
     $.ajax({
             type:"GET",
@@ -134,13 +72,60 @@ function getTeam(teamname) {
             displayRoster(result);
         })
         .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
-        
+            //do something failure-ish here
         });    
 }
+
+function createTeam(teamname,helmet) {
+    console.log(teamname,helmet,user_name,user_id);
+        var data = {
+        'team_name':teamname,
+        'user_name':user_name,
+        'user_id':user_id,
+        'helmet':helmet,
+    };
+    $.ajax({
+            url:"https://fantasy-app-danj707.c9users.io/teams",
+            type:'POST',
+            data:JSON.stringify(data),
+            dataType:'json',
+        })
+        .done(function (result) { //this waits for the ajax to return with a succesful promise object
+            console.log("Success!");
+        })
+        .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
+            console.log("Crap, failure!");
+        });    
+}
+
+function updateTeam() {
+        var data = {
+        'team_name':teamname,
+        'user_name':user_name,
+        'user_id':user_id,
+        'helmet':helmet,
+    };
+    $.ajax({
+            url:"https://fantasy-app-danj707.c9users.io/teams",
+            method:'POST',
+            type:'POST',
+            data:JSON.stringify(data),
+            dataType:'json',
+        })
+        .done(function (result) { //this waits for the ajax to return with a succesful promise object
+            console.log("Success!");
+        })
+        .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
+            console.log("Crap, failure!");
+        });    
+}
+
 
 function genBuilder() {
         $('section.intro').css('display','none');
         $('section.builder').css('display','inline-block');
+        
+        //some API call here to update the DB with team form selections, team name, helmet, etc
 }
 
 function mainDisplay(teamname) {
@@ -153,10 +138,7 @@ function mainDisplay(teamname) {
 
 function displayRoster(result) {
     
-        var teamname = result[0].team_name;
-        console.log(result);
-    
-        $('h1.teamname').text(teamname + " Current Roster");
+        $('h1.teamname').text(result[0].team_name + " Current Roster");
         
         $('p#qb_name').text("Name: " + result[0].QB);
         $('p#rb1_name').text("Name: " + result[0].RB1);
@@ -192,9 +174,15 @@ $(document).ready(function () {
     $('#team_builder').submit(function (event) {
         event.preventDefault();
         var teamname = $('input#teamname').val();
-        var helmet = $("input[class='radio']:checked").val();
+        var helmet = $("input[class='helmet']:checked").val();
+        
+        if(!helmet) {
+            $('p.error').text("Must enter a teamname and choose a helmet");
+        } else {
+            createTeam(teamname,helmet);
+        }
 
-        mainDisplay();
+        
     });
 
 });

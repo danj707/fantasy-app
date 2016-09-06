@@ -52,7 +52,6 @@ app.get('/teams', function(req, res) {
     });
 });
 
-
 //GET A TEAM BY NAME, returns team object
 app.get('/teams/:name', function(req, res) {
     var name = req.params.name;
@@ -70,20 +69,22 @@ app.get('/teams/:name', function(req, res) {
 
 ///////////CREATES NEW TEAM IN DB
 app.post('/teams', function(req, res) {
+    console.log(req.body);
+    console.log(req.query);
+    console.log(req.params);
     Team.create({
-        team_id: req.query.team_id,
         team_name: req.query.team_name,
         user_name: req.query.user_name,
         user_id:req.query.user_id,
-        helmet:req.query.helmet,
-        QB:req.query.QB,
-        RB1:req.query.RB1,
-        RB2:req.query.RB2,
-        WR1:req.query.WR1,
-        WR2:req.query.WR2,
-        WR3:req.query.WR3,
-        K:req.query.K,
-        DEF:req.query.DEF
+        helmet:req.query.helmet
+        // QB:req.query.QB,
+        // RB1:req.query.RB1,
+        // RB2:req.query.RB2,
+        // WR1:req.query.WR1,
+        // WR2:req.query.WR2,
+        // WR3:req.query.WR3,
+        // K:req.query.K,
+        // DEF:req.query.DEF
     }, function(err, item) {
         if (err) {
             console.log(err);
@@ -153,23 +154,13 @@ app.get('/login', function(req, res) {
             });
         }
         if(!items) {
-            res.json({
-                message: 'Failure',
-                team:false
+            //bad login, un/password mismatch
+            console.log("User:" + uname + " attempted login!");
+            return res.status(401).json({
+                message: 'Not found'
             });
         } else {
-            if(items.team_name) {
-                res.json({
-                    message: 'Success',
-                    team:true,
-                    team_name:items.team_name,
-                });
-            } else {
-                res.json({
-                    message: 'Success',
-                    team:false
-                });
-            }
+            return res.json(items);
         }
     });
 });
@@ -184,6 +175,7 @@ app.put('/users', function(req,res) {
                  message: 'Internal Server Error'
              });
          }
+         console.log("Updated username!");
          res.status(201).json(items);
    });
 });
@@ -198,6 +190,7 @@ app.delete('/users/:id', function(req,res) {
                 message: 'Internal Server Error'
             });
         }
+        console.log("Deleted user!");
         res.status(201).json(item);
    });
 });
@@ -217,6 +210,7 @@ app.post('/users/create', function(req, res) {
             res.json({
                 message: 'Success',
             });
+            console.log("Created new user!");
         }
     });
 });
