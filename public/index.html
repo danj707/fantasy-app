@@ -4,6 +4,7 @@
     <title>NFL Fantasy Team Builder</title>
     <link href="https://fonts.googleapis.com/css?family=Graduate" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="main.css">
+    <link rel='shortcut icon' href='/images/favicon.ico' type='image/x-icon'/ >
 </header>
 
 <body>
@@ -66,49 +67,57 @@
         <h1>And pick your team helmet:</h1>
 
         <div class="row">
-            <div class="helmet"><img class="helmet_size" src="images/black-helmet.jpg">
+            
+            <label id="black"><div class="helmet"><img class="helmet_size" src="images/black-helmet.jpg">
                 <p>
-                    <input type="radio" class="helmet" name="helmet" value="black">
+                    <input type="radio" class="helmet" name="helmet" value="black" id="black">
                 </p>
-            </div>
-            <div class="helmet"><img class="helmet_size" src="images/blue-helmet.jpg">
+            </div></label>
+            
+            <label id="blue"><div class="helmet"><img class="helmet_size" src="images/blue-helmet.jpg">
                 <p>
-                    <input type="radio" class="helmet" name="helmet" value="blue">
+                    <input type="radio" class="helmet" name="helmet" value="blue" id="blue">
                 </p>
-            </div>
-            <div class="helmet"><img class="helmet_size" src="images/gold-helmet.jpg">
+            </div></label>
+            
+            <label id="gold"><div class="helmet"><img class="helmet_size" src="images/gold-helmet.jpg">
                 <p>
-                    <input type="radio" class="helmet" name="helmet" value="gold">
+                    <input type="radio" class="helmet" name="helmet" value="gold" id="gold">
                 </p>
-            </div>
-            <div class="helmet"><img class="helmet_size" src="images/orange-helmet.jpg">
+            </div></label>
+            
+            <label id="orange"><div class="helmet"><img class="helmet_size" src="images/orange-helmet.jpg">
                 <p>
-                    <input type="radio" class="helmet" name="helmet" value="orange">
+                    <input type="radio" class="helmet" name="helmet" value="orange" id="orange">
                 </p>
-            </div>
+            </div></label>
         </div>
 
         <div class="row">
-            <div class="helmet"><img class="helmet_size" src="images/purple-helmet.jpg">
+            
+            <label id="purple"><div class="helmet"><img class="helmet_size" src="images/purple-helmet.jpg">
                 <p>
-                    <input type="radio" class="helmet" name="helmet" value="purple">
+                    <input type="radio" class="helmet" name="helmet" value="purple" id="purple">
                 </p>
-            </div>
-            <div class="helmet"><img class="helmet_size" src="images/shark-helmet.jpg">
+            </div></label>
+            
+            <label id="shark"><div class="helmet"><img class="helmet_size" src="images/shark-helmet.jpg">
                 <p>
-                    <input type="radio" class="helmet" name="helmet" value="shark">
+                    <input type="radio" class="helmet" name="helmet" value="shark" id="shark">
                 </p>
-            </div>
-            <div class="helmet"><img class="helmet_size" src="images/silver-helmet.jpg">
+            </div></label>
+            
+            <label id="silver"><div class="helmet"><img class="helmet_size" src="images/silver-helmet.jpg">
                 <p>
-                    <input type="radio" class="helmet" name="helmet" value="silver">
+                    <input type="radio" class="helmet" name="helmet" value="silver" id="silver">
                 </p>
-            </div>
-            <div class="helmet"><img class="helmet_size" src="images/stars-helmet.jpg">
+            </div></label>
+            
+            <label id="stars"><div class="helmet"><img class="helmet_size" src="images/stars-helmet.jpg">
                 <p>
-                    <input type="radio" class="helmet" name="helmet" value="stars">
+                    <input type="radio" class="helmet" name="helmet" value="stars" id="stars">
                 </p>
-            </div>
+            </div></label>
         </div>
         
         <div><p class="error"></p></div>
@@ -126,8 +135,8 @@
     <!--start of main page section-->
     <section class="main">
         <div class="nav">
-            <h2>Team Name</h2>
-            <img class="helmet_logo" src="images/black-helmet.jpg">
+            <h2 id="team_name">Team Name</h2>
+            <img class="helmet_logo">
             <a href="#" id="builder">Edit Team Info</a>
         </div>
 

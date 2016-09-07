@@ -40,9 +40,9 @@ if (require.main === module) {
     });
 };
 
-////////////////////////////////////////////////////
-/////////////TEAMS//////////////////////////////////
-////////////////////////////////////////////////////
+
+///////////-----Teams Endpoints------/////////////////////////////
+
 //GET route, displays a list of all the items in DB
 app.get('/teams', function(req, res) {
     Team.find(function(err, items) {
@@ -55,7 +55,7 @@ app.get('/teams', function(req, res) {
     });
 });
 
-//GET A TEAM BY NAME, returns team object
+//Get a team by name, returns team object
 app.get('/teams/:name', function(req, res) {
     var name = req.params.name;
     Team.findOne({
@@ -70,7 +70,7 @@ app.get('/teams/:name', function(req, res) {
     });
 });
 
-///////////CREATES NEW TEAM IN DB
+//Creates new team in DB
 app.post('/teams', function(req, res) {
     Team.create({
         team_name: req.body.team_name,
@@ -97,18 +97,18 @@ app.post('/teams', function(req, res) {
     });
 });
 
-///////////////UPDATES TEAM NAME AND HELMET
+//Updates Team Name with new teamname and helmet choice
 app.put('/team', function(req,res) {
-    var _id = {_id:req.body.team_id};
-    var teamname = {name:req.body.teamname};
-    var helmet = {helmet:req.body.helmet};
+    var _id = req.body.team_id;
+    var teamname = req.body.team_name;
+    var helmet = req.body.helmet;
     console.log(_id,teamname,helmet);
-   Team.findOneAndUpdate({
-       _id:_id,
-       team_name:teamname,
-       helmet:helmet
-    },  function(err,items) {
+   Team.findOneAndUpdate(
+       {_id:_id},
+       {team_name:teamname,helmet:helmet},
+       function(err,items) {
         if (err) {
+            console.log(err);
              return res.status(500).json({
                  message: 'Internal Server Error'
              });
@@ -117,7 +117,7 @@ app.put('/team', function(req,res) {
    });
 });
 
-//REMOVES USER BY ID FROM DB
+//REMOVES Team by ID from DB
 app.delete('/teams/:id', function(req,res) {
    Team.remove({
        _id: req.params.id
@@ -131,9 +131,9 @@ app.delete('/teams/:id', function(req,res) {
    });
 });
 
-////////////////////////////////////////////////////////
-///////////////USERS////////////////////////////////////
-////////////////////////////////////////////////////////
+
+//////////------Users Endpoints------//////////////////////////////
+
 //GET route, displays a list of all the items in DB
 app.get('/users', function(req, res) {
     User.find(function(err, items) {
@@ -146,7 +146,7 @@ app.get('/users', function(req, res) {
     });
 });
 
-//LOGIN OF A SINGLE USER BY USERNAME AND PASSWORD FROM LOGIN PAGE
+//--Login of single user from login page
 app.get('/login', function(req, res) {
     var uname = req.query.username;
     var pwd = req.query.password;
@@ -171,7 +171,7 @@ app.get('/login', function(req, res) {
     });
 });
 
-////////UPDATES USER NAME
+//--Updates user name
 app.put('/users', function(req,res) {
     var user_id = {user_id:req.body.user_id};
     var username = {username:req.body.username};
@@ -186,7 +186,7 @@ app.put('/users', function(req,res) {
    });
 });
 
-////////UPDATES TEAM NAME IN USER TABLE
+//--Updates team name by user ID in users table
 app.put('/users/:team', function(req,res) {
     var _id = {_id:req.body.user_id};
     var team_name = {team_name:req.body.team_name};
@@ -203,7 +203,7 @@ app.put('/users/:team', function(req,res) {
    });
 });
 
-//REMOVES USER BY ID FROM DB
+//--Removes user from DB
 app.delete('/users/:id', function(req,res) {
    User.remove({
        _id: req.params.id
@@ -218,7 +218,7 @@ app.delete('/users/:id', function(req,res) {
    });
 });
 
-//CREATES NEW USER IN DB, FROM NEW USER/LOGIN FORM
+//--Creates new user in DB from login/signup main page
 app.post('/users/create', function(req, res) {
     User.create({
         username: req.query.username,
@@ -236,9 +236,9 @@ app.post('/users/create', function(req, res) {
     });
 });
 
-////////////////////////////////////////////////////////////
-/////////////PLAYERS///////////////////////////////////////
-///////////////////////////////////////////////////////////
+
+////////-----Players Endpoints-----/////////////////////////////
+
 //PUT route, updates the player by id from the DB
 app.put('/players/:id', function(req,res) {
     var id = {_id:req.body._id};
