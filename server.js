@@ -13,6 +13,9 @@ var Players = require('./models/players');
 //serves static files and uses json bodyparser
 app.use(express.static('public'));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 var runServer = function(callback) {
     mongoose.connect(config.DATABASE_URL, function(err) {
@@ -69,22 +72,19 @@ app.get('/teams/:name', function(req, res) {
 
 ///////////CREATES NEW TEAM IN DB
 app.post('/teams', function(req, res) {
-    console.log(req.body);
-    console.log(req.query);
-    console.log(req.params);
     Team.create({
-        team_name: req.query.team_name,
-        user_name: req.query.user_name,
-        user_id:req.query.user_id,
-        helmet:req.query.helmet
-        // QB:req.query.QB,
-        // RB1:req.query.RB1,
-        // RB2:req.query.RB2,
-        // WR1:req.query.WR1,
-        // WR2:req.query.WR2,
-        // WR3:req.query.WR3,
-        // K:req.query.K,
-        // DEF:req.query.DEF
+        team_name: req.body.team_name,
+        user_id: req.body.user_id,
+        user_name: req.body.user_name,
+        helmet:req.body.helmet,
+        QB:'',
+        RB1:'',
+        RB2:'',
+        WR1:'',
+        WR2:'',
+        WR3:'',
+        K:'',
+        DEF:''
     }, function(err, item) {
         if (err) {
             console.log(err);
@@ -92,17 +92,23 @@ app.post('/teams', function(req, res) {
                 message: 'Internal Server Error'
             });
         }
-        res.status(201).json(item);
+        console.log("Create new team");
+        return res.json(item);
     });
 });
 
-///////////////UPDATES TEAM NAME
-app.put('/teams', function(req,res) {
-    var team_id = {team_id:req.body.team_id};
-    var update = {name:req.body.name};
-    console.log(team_id,update);
-   Team.findOneAndUpdate(team_id,update, function(err,items) {
-         if (err) {
+///////////////UPDATES TEAM NAME AND HELMET
+app.put('/team', function(req,res) {
+    var _id = {_id:req.body.team_id};
+    var teamname = {name:req.body.teamname};
+    var helmet = {helmet:req.body.helmet};
+    console.log(_id,teamname,helmet);
+   Team.findOneAndUpdate({
+       _id:_id,
+       team_name:teamname,
+       helmet:helmet
+    },  function(err,items) {
+        if (err) {
              return res.status(500).json({
                  message: 'Internal Server Error'
              });
@@ -180,6 +186,23 @@ app.put('/users', function(req,res) {
    });
 });
 
+////////UPDATES TEAM NAME IN USER TABLE
+app.put('/users/:team', function(req,res) {
+    var _id = {_id:req.body.user_id};
+    var team_name = {team_name:req.body.team_name};
+    console.log(req.body);
+   User.findOneAndUpdate(_id,team_name, function(err,items) {
+         if (err) {
+             console.log(err);
+             return res.status(500).json({
+                 message: 'Internal Server Error'
+             });
+         }
+         console.log("Added teamname to user");
+         res.status(201).json(items);
+   });
+});
+
 //REMOVES USER BY ID FROM DB
 app.delete('/users/:id', function(req,res) {
    User.remove({
@@ -207,10 +230,8 @@ app.post('/users/create', function(req, res) {
             });
         }
         if(item) {
-            res.json({
-                message: 'Success',
-            });
             console.log("Created new user!");
+            return res.json(item);
         }
     });
 });

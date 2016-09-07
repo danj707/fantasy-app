@@ -53,12 +53,11 @@
     <!--start of team builder section-->
     <section class="builder">
         <div>
-            <h2>Lets build your team!</h2>
             <img class="small" src="images/NFL_Draft.png">
         </div>
 
         <div>
-            <h1>Enter your team name:</h1>
+            <h1>Add/edit your team name:</h1>
             <form id="team_builder">
                 <label id="teamname">
                     <input type="text" name="teamname" id="teamname" placeholder="teamname" required></input>
@@ -74,17 +73,17 @@
             </div>
             <div class="helmet"><img class="helmet_size" src="images/blue-helmet.jpg">
                 <p>
-                    <input type="radio" class="helmet" name="helmet" value="black">
+                    <input type="radio" class="helmet" name="helmet" value="blue">
                 </p>
             </div>
             <div class="helmet"><img class="helmet_size" src="images/gold-helmet.jpg">
                 <p>
-                    <input type="radio" class="helmet" name="helmet" value="black">
+                    <input type="radio" class="helmet" name="helmet" value="gold">
                 </p>
             </div>
             <div class="helmet"><img class="helmet_size" src="images/orange-helmet.jpg">
                 <p>
-                    <input type="radio" class="helmet" name="helmet" value="black">
+                    <input type="radio" class="helmet" name="helmet" value="orange">
                 </p>
             </div>
         </div>
@@ -116,7 +115,8 @@
 
         <div>
             <label id="team_build_form">
-                <input type="submit" value="Make My Team" id="team_build_form"></input>
+                <input type="submit" value="Make/Edit My Team" id="team_build_form"></input>
+                <button type="reset" value="Reset">Reset</button>
             </label>
         </div>
     </section>
@@ -128,7 +128,7 @@
         <div class="nav">
             <h2>Team Name</h2>
             <img class="helmet_logo" src="images/black-helmet.jpg">
-            <a href="#">Edit Team Info</a>
+            <a href="#" id="builder">Edit Team Info</a>
         </div>
 
         <div class="teaminfo">

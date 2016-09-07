@@ -2,10 +2,17 @@
 
 /* global $ */
 
+//TODO
+
+//Add global var
+//Update findOneandUpdate
+
+var projectURL = 'https://fantasy-app-danj707.c9users.io';
 var user_name;
 var user_id;
 var team_name;
 var team_id;
+var helmet;
 
 //API CALL TO ENDPOINT FOR USERNAME/PW LOGIN
 function loginUser(username,password) {
@@ -17,14 +24,13 @@ function loginUser(username,password) {
     };
     $.ajax({
             type:"GET",
-            url:"https://fantasy-app-danj707.c9users.io/login",
+            url:projectURL + "/login",
             data: request,
             dataType:'json',
         })
         .done(function (result) { //this waits for the ajax to return with a succesful promise object
             user_name = result.username;
-            user_id=result._id;
-            
+            user_id = result._id;
             if(result.team_name) {
                     //has a team, go to mainpage
                     team_name = result.team_name;
@@ -40,7 +46,7 @@ function loginUser(username,password) {
 }
 
 //API CALL TO ENDPOINT FOR NEW USER CREATION
-function newUser(username,password) {
+function newUser(username, password) {
     $('p.error').empty();
     $.ajax({
             type:"POST",
@@ -48,11 +54,11 @@ function newUser(username,password) {
             dataType:'json',
         })
         .done(function (result) { //this waits for the ajax to return with a succesful promise object
-            console.log("DB add sent!");
-            console.log(result);
-            if(result.message == 'Success') {
-                genBuilder(username);
-            } else if (result.message == 'Failure') {
+            user_name = result.username;
+            user_id = result._id;
+            if(result.username) {
+                genBuilder(result);
+            } else {
                 $('p.newuser_error').text("Sorry, couldn't create that account, try another username");
             }
         })
@@ -62,61 +68,75 @@ function newUser(username,password) {
 }
 
 //API CALL TO ENDPOINT FOR GET TEAM DATA BY TEAM NAME
-function getTeam(teamname) {
+//ToDo - Cleanup parameters, passed in by var object
+function getTeam() {
     $.ajax({
             type:"GET",
-            url:"https://fantasy-app-danj707.c9users.io/teams/?name=" + teamname,
+            url:"https://fantasy-app-danj707.c9users.io/teams/?name=" + team_name,
             dataType:'json',
         })
         .done(function (result) { //this waits for the ajax to return with a succesful promise object
             displayRoster(result);
         })
         .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
-            //do something failure-ish here
+            //todo something failure-ish here
         });    
 }
 
 function createTeam(teamname,helmet) {
-    console.log(teamname,helmet,user_name,user_id);
-        var data = {
-        'team_name':teamname,
-        'user_name':user_name,
-        'user_id':user_id,
-        'helmet':helmet,
-    };
+        var data = "team_name=" + teamname + "&user_name=" + user_name + "&user_id=" + user_id + "&helmet=" + helmet;
     $.ajax({
             url:"https://fantasy-app-danj707.c9users.io/teams",
             type:'POST',
-            data:JSON.stringify(data),
-            dataType:'json',
+            data:data,
         })
         .done(function (result) { //this waits for the ajax to return with a succesful promise object
             console.log("Success!");
+            team_name = result.team_name;
+            team_id = result._id;
+            helmet = result.helmet;
+            updateUserTeam(result,teamname);
+            mainDisplay(result);
         })
         .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
             console.log("Crap, failure!");
+            $('p.error').text("An error occurred, please try again.");
         });    
 }
 
-function updateTeam() {
-        var data = {
-        'team_name':teamname,
-        'user_name':user_name,
-        'user_id':user_id,
-        'helmet':helmet,
-    };
+function updateUserTeam(result,teamname) {
+    var data = "user_id=" + result.user_id + "&team_name=" + teamname;
+    console.log(data);
     $.ajax({
-            url:"https://fantasy-app-danj707.c9users.io/teams",
-            method:'POST',
-            type:'POST',
-            data:JSON.stringify(data),
-            dataType:'json',
+            url:"https://fantasy-app-danj707.c9users.io/users/team",
+            type:'PUT',
+            data:data
         })
         .done(function (result) { //this waits for the ajax to return with a succesful promise object
-            console.log("Success!");
+            console.log("Update team name succeeded!");
         })
         .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
-            console.log("Crap, failure!");
+            console.log("Update teamname failed!");
+        });    
+}
+
+function editTeam(teamname,helmet) {
+    console.log(team_id,teamname,helmet);
+    
+    var data = "team_id=" + team_id + "&team_name=" + teamname + "&helmet=" + helmet;
+    console.log(data);
+    $.ajax({
+            url:"https://fantasy-app-danj707.c9users.io/team",
+            type:'PUT',
+            data:data
+        })
+        .done(function (result) { //this waits for the ajax to return with a succesful promise object
+            console.log(result);
+            console.log("Update team info succeeded!");
+        })
+        .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
+            console.log(result);
+            console.log("Update team info failed!");
         });    
 }
 
@@ -124,22 +144,18 @@ function updateTeam() {
 function genBuilder() {
         $('section.intro').css('display','none');
         $('section.builder').css('display','inline-block');
-        
-        //some API call here to update the DB with team form selections, team name, helmet, etc
+        //API call handled by document code
 }
 
-function mainDisplay(teamname) {
+function mainDisplay(result) {
         $('section.intro').css('display','none');
         $('section.builder').css('display','none');
         $('section.main').css('display','block');
-        
-        getTeam(teamname);
+        getTeam(result);
 }
 
 function displayRoster(result) {
-    
-        $('h1.teamname').text(result[0].team_name + " Current Roster");
-        
+        $('h1.teamname').text(team_name + " Current Roster");
         $('p#qb_name').text("Name: " + result[0].QB);
         $('p#rb1_name').text("Name: " + result[0].RB1);
         $('p#rb2_name').text("Name: " + result[0].RB2);
@@ -148,7 +164,6 @@ function displayRoster(result) {
         $('p#wr3_name').text("Name: " + result[0].WR3);
         $('p#k_name').text("Name: " + result[0].K);      
         $('p#defense').text("Name: " + result[0].DEF);
-        
 }
 
 $(document).ready(function () {
@@ -167,7 +182,7 @@ $(document).ready(function () {
         if(!username && password) {
             $('p.error').text("Must enter a username/password for a new user signup.");
         } else {
-            newUser(username,password);
+            newUser(username, password);
         }
 });
     
@@ -176,12 +191,25 @@ $(document).ready(function () {
         var teamname = $('input#teamname').val();
         var helmet = $("input[class='helmet']:checked").val();
         
+        if(helmet) {
+            $('input#'+ helmet).attr('checked','true');
+        }
+        
         if(!helmet) {
             $('p.error').text("Must enter a teamname and choose a helmet");
         } else {
-            createTeam(teamname,helmet);
+            if(team_name) {
+                editTeam(teamname,helmet);
+            } else {
+                createTeam(teamname,helmet);
+            }
         }
+    });
 
+    $('a#builder').click(function (event) {
+        $('section.main').css('display','none');
+        $('section.intro').css('display','none');
+        genBuilder();
         
     });
 

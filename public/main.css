@@ -152,6 +152,8 @@ img.helmet_logo {
     text-align: center;
     width: 80%;
     display: none;
+    background:lightgray;
+    padding:10px;
 }
 
 

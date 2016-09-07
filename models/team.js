@@ -3,18 +3,18 @@ var mongoose = require('mongoose');
 var TeamSchema = new mongoose.Schema({
     team_name: { 
         type: String,
-        required: true 
+        required: true,
+        unique:true
+    },
+    user_id: {
+        type:String,
     },
     user_name: {
         type:String
     },
-    user_id: {
-        type:Number,
-        required:true,
-        unique:true
-    },
     helmet: {
-        type:String
+        type:String,
+        unique:false,
     },
     QB: {
         type: String,
