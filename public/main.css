@@ -12,6 +12,10 @@ body {
     background-size: auto;
 }
 
+a#builder {
+    color:white;
+}
+
 html {
     font-family: 'Graduate', cursive;
     box-sizing: border-box;
@@ -59,7 +63,8 @@ div.row {
 div.ticker {
     align-content: center;
     display: inherit;
-    width: 70%;
+    width: 80%;
+    margin:auto;
     background: white;
     padding-top: 15px;
     padding-bottom: 15px;
@@ -83,13 +88,23 @@ div.position {
 
 div.teaminfo {
     align-content: center;
-    width: 70%;
+    width: 80%;
     display: inline-block;
     background: lightgray;
 }
 
+div.player_list {
+    overflow:auto;
+    height:500px;
+    padding:10px;
+}
 
 /*ID Rules*/
+
+#player_list {
+    padding:5px;
+    list-style: none;
+}
 
 #login {
     width: 50%;
@@ -144,23 +159,35 @@ img.helmet_logo {
     width: 80%;
 }
 
-
 /*TEAM BUILDER PAGE - 2ND PAGE*/
 
 .builder {
     display: inline-block;
     text-align: center;
     width: 80%;
-    display: none;
     background:lightgray;
     padding:10px;
+    margin:auto;
 }
-
 
 /*MAIN DISPLAY PAGE*/
 
 .main {
     display: none;
+    margin:auto;
+    width:80%;
+}
+
+/*Player Editing Page*/
+.player_edits {
+    display: inline-block;
+    text-align: center;
+    width: 80%;
+    display: none;
+    border-radius:3px;
+    background:lightgray;
+    margin:auto;
+    padding:10px;
 }
 
 

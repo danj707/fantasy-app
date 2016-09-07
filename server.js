@@ -8,7 +8,8 @@ var config=require('./config');
 //require schemas for team, user and players
 var Team = require('./models/team');
 var User = require('./models/user');
-var Players = require('./models/players');
+//var Players = require('./models/players');
+var QB = require('./models/qb_players');
 
 //serves static files and uses json bodyparser
 app.use(express.static('public'));
@@ -50,23 +51,26 @@ app.get('/teams', function(req, res) {
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
+        } else {
+            res.json(items);
         }
-        res.json(items);
+                
     });
 });
 
 //Get a team by name, returns team object
-app.get('/teams/:name', function(req, res) {
-    var name = req.params.name;
+app.get('/teams/:team_name', function(req, res) {
+    var team_name = req.params.team_name;
     Team.findOne({
-        name:name    
+        team_name:team_name    
     }, function(err, items) {
         if (err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
+        } else {
+            res.json(items);
         }
-        res.json(items);
     });
 });
 
@@ -114,6 +118,32 @@ app.put('/team', function(req,res) {
              });
          }
          res.status(201).json(items);
+   });
+});
+
+//Updates Team Roster with New Player PID's
+app.put('/team/roster', function(req,res) {
+        var _id = req.body.team_id;
+        var qb_pid = req.body.qb_pid;
+        var rb1_pid = req.body.rb1_pid;
+        var rb2_pid = req.body.rb2_pid;
+        var wr1_pid = req.body.wr1_pid;
+        var wr2_pid = req.body.wr2_pid;
+        var wr3_pid = req.body.wr3_pid;
+        var k_pid = req.body.k_pid;
+        var def_pid = req.body.def_pid;
+        
+   Team.findOneAndUpdate(
+       {_id:_id},
+       {QB:qb_pid,RB1:rb1_pid,RB2:rb2_pid,WR1:wr1_pid,WR2:wr2_pid,WR3:wr3_pid,K:k_pid,DEF:def_pid},
+       function(err,items) {
+        if (err) {
+            console.log(err);
+             return res.status(500).json({
+                 message: 'Internal Server Error'
+             });
+         }
+         return res.json(items);
    });
 });
 
@@ -239,32 +269,87 @@ app.post('/users/create', function(req, res) {
 
 ////////-----Players Endpoints-----/////////////////////////////
 
-//PUT route, updates the player by id from the DB
-app.put('/players/:id', function(req,res) {
-    var id = {_id:req.body._id};
-    var update = {name:req.body.name};
-   Team.findOneAndUpdate(id,update, function(err,items) {
-         if (err) {
-             return res.status(500).json({
-                 message: 'Internal Server Error'
-             });
-         }
-         res.status(201).json(items);
-   });
+//GET route, displays a list of all the items in the QB players table
+app.get('/players/qb', function(req, res) {
+    QB.find(function(err, items) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        } else {
+            res.json(items);
+        }
+    });
 });
 
-//DELETE route, removes the player by name from the DB
-app.delete('/players/:id', function(req,res) {
-   Team.remove({
-       _id: req.params.id
-   }, function(err,item) {
+//POST route, adds a player to the DB by position and pid
+// - For Dev use only, manual addition of players into DB
+app.post('/players/qb/:qb_pid', function(req, res) {
+//    var qb_pid = res.query.qb_pid;
+    QB.create({
+        qb_pid:req.params.qb_pid,
+        position:req.body.position,
+        lname:req.body.lname,
+        fname:req.body.fname,
+        jersey:req.body.jersey,
+        real_team:req.body.real_team,
+        height:req.body.height,
+        weight:req.body.weight,
+        college:req.body.college
+    }, function(err, item) {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        console.log("Created new quarterback!");
+        return res.json(item);
+    });
+});
+
+//GET route, gets a QB from the DB by pid
+app.get('/players/qb/:qb_pid', function(req, res) {
+    var qb_pid = res.body.qb_pid;
+    QB.findOne({
+        qb_pid:qb_pid,
+        }, function(err, items) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        } else {
+            res.json(items);
+        }
+    });
+});
+
+// //PUT route, updates the player by id from the DB
+// app.put('/players/:id', function(req,res) {
+//     var id = {_id:req.body._id};
+//     var update = {name:req.body.name};
+//   QB.findOneAndUpdate(id,update, function(err,items) {
+//          if (err) {
+//              return res.status(500).json({
+//                  message: 'Internal Server Error'
+//              });
+//          }
+//          res.status(201).json(items);
+//   });
+// });
+
+//DELETE route, removes the qb by PID
+app.delete('/players/qb/:qb_pid', function(req,res) {
+  QB.remove({
+      qb_pid: req.params.qb_pid
+  }, function(err,item) {
         if (err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
         }
         res.status(201).json(item);
-   });
+  });
 });
 
 

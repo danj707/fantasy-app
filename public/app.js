@@ -4,7 +4,9 @@
 
 //--TODO START
 
-//Update findOneandUpdate
+//Change getTeam to query each table by player ID, and return result -
+//currently it queries the team table and returns the PID
+
 //--TODO END
 
 //--Sets global project name in api call, useful if we change servers, etc
@@ -80,15 +82,21 @@ function newUser(username, password) {
 function getTeam() {
     $.ajax({
             type:"GET",
-            url:projectURL + "/teams/?name=" + team_name,
+            url:projectURL + "/teams/" + team_name,
             dataType:'json',
         })
         .done(function (result) {
-            //Successfully got team information, take to the main page
-            displayRoster(result);
+            if(result) {
+                //Successfully got team information, take to the main page
+                team_id = result._id;
+                current_helmet = result.helmet;
+                displayRoster(result);
+            } else {
+                //Search returned null, team doesn't exist - do something here TODO
+            }            
         })
         .fail(function (jqXHR, error) {
-            displayRoster(error)
+            displayRoster(error);
         });    
 }
 
@@ -131,7 +139,26 @@ function updateUserTeam(team_name) {
         })
         .done(function (result) { //this waits for the ajax to return with a succesful promise object
             console.log("Update team name succeeded!");
-            //TODO - add user context success here
+            mainDisplay();
+        })
+        .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
+            //TODO - add user error message here
+            console.log("Update teamname failed!");
+        });    
+}
+
+//--updateUserTeamWithPlayer API to update the team name by user ID
+function updateUserTeamWithQBID(player_choice) {
+    var q_string = "team_id=" + team_id + "&qb_pid=" + player_choice;
+    console.log(q_string);
+    $.ajax({
+            url:projectURL + "/team/roster",
+            type:'PUT',
+            data:q_string
+        })
+        .done(function (result) { //this waits for the ajax to return with a succesful promise object
+            console.log("Update team name succeeded!");
+            mainDisplay();
         })
         .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
             //TODO - add user error message here
@@ -141,10 +168,8 @@ function updateUserTeam(team_name) {
 
 //--editTeam API to update the team name and helmet choice
 function editTeam(teamname,helmet) {
-    
     //Gets the new team name and helmet choice from the form input
     var q_string = "team_id=" + team_id + "&team_name=" + teamname + "&helmet=" + helmet;
-    console.log(q_string);
     $.ajax({
             url:projectURL + "/team",
             type:'PUT',
@@ -169,6 +194,45 @@ function editTeam(teamname,helmet) {
         });    
 }
 
+//--getNewPlayer API gets a list of all available players by position, 
+//--builds page to let user choose new players to add to team
+function getNewPlayers(position) {
+    $.ajax({
+            type:"GET",
+            url:projectURL + "/players/" + position,
+            dataType:'json',
+        })
+        .done(function (result) {
+            if(result) {
+                //Successfully got the player information from table by position, display the update page to make new
+                //choices, update the player's roster, etc
+                playerUpdatePage(result);
+                console.log(result);
+            } else {
+                //Search returned null, team doesn't exist - do something here TODO
+            }            
+        })
+        .fail(function (jqXHR, error) {
+            $('p.error').text("Sorry, a database error occurred, try again later.");
+            console.log(error);
+        });
+        
+
+}
+
+//--Display the player update page, generic for position, etc.  Displays form handler for adding/updating players
+//--to team roster
+function playerUpdatePage(result) {
+        $('li.playerlist').empty();
+        for(var i=0;i<result.length;i++) {
+            var name = result[i].fname + " " + result[i].lname;
+            var real_team = result[i].real_team;
+            
+            $('li.playerlist').append("<label id='player_update'><li>" + name + " - " + real_team + "<input type='radio' name='player' value=" + result[i].qb_pid + "></input></li></label>");
+        }
+    
+}
+
 //--Activates sections to display the Team Builder Page
 function genBuilder() {
         $('section.intro').css('display', 'none');
@@ -181,43 +245,48 @@ function mainDisplay(result) {
         $('section.intro').css('display', 'none');
         $('section.builder').css('display', 'none');
         $('section.main').css('display', 'block');
-        
-        $('h2#team_name').text(team_name);
-        
-        if(current_helmet) {
-            console.log(current_helmet);
-            $('img.helmet_logo').attr("src","images/"+ current_helmet + "-helmet.jpg");
-        } else {
-            //display a generic helmet image
-            $('img.helmet_logo').attr("src","images/black-helmet.jpg");
-        }
-         
+    
         getTeam(result);
 }
 
 //--Activates main Roster page, makes API call to get the team information
 function displayRoster(result,error) {
+    
+        $('h2#team_name').text(team_name);
+
+        if(current_helmet) {
+            $('img.helmet_logo').attr("src","images/"+ current_helmet + "-helmet.jpg");
+        } else {
+            //display a generic helmet image
+            $('img.helmet_logo').attr("src","images/black-helmet.jpg");
+        }
+
         if(error) {
             $('h1.teamname').text("Sorry, there was an error getting your team roster, try again later.");
         } else {
             $('h1.teamname').text(team_name + " Current Roster");
         }
         
-        console.log(result);
-        console.log(error);
+        $('p#qb_pid').text("PID: " + result.QB);
+
         
-        $('p#qb_name').text("Name: " + result[0].QB);
-        $('p#rb1_name').text("Name: " + result[0].RB1);
-        $('p#rb2_name').text("Name: " + result[0].RB2);
-        $('p#wr1_name').text("Name: " + result[0].WR1);
-        $('p#wr2_name').text("Name: " + result[0].WR2);
-        $('p#wr3_name').text("Name: " + result[0].WR3);
-        $('p#k_name').text("Name: " + result[0].K);      
-        $('p#defense').text("Name: " + result[0].DEF);
+        $('p#rb1_pid').text("PID: " + result.RB1);
+        $('p#rb2_pid').text("PID: " + result.RB2);
+        $('p#wr1_pid').text("PID: " + result.WR1);
+        $('p#wr2_pid').text("PID: " + result.WR2);
+        $('p#wr3_pid').text("PID: " + result.WR3);
+        $('p#k_pid').text("PID: " + result.K);      
+        $('p#def_pid').text("PID: " + result.DEF);
 }
 
 //--Main Doc ready function
 $(document).ready(function () {
+        $('section.intro').css('display', 'inline-block');
+        
+        $('section.main').css('display', 'none');
+        $('section.builder').css('display', 'none');
+        $('section.player_edits').css('display', 'none');
+    
     
     //Handle login click, call API to login user
     $('#login').submit(function (event) {
@@ -267,6 +336,28 @@ $(document).ready(function () {
         $('section.main').css('display', 'none');
         $('section.intro').css('display', 'none');
         genBuilder();
+    });
+    
+    //Clicking the QB edit button calls the API to get list of available quarterbacks, page to choose them
+    //and add back to the user's team
+    $('#qb_edit').click(function(event) {
+        event.preventDefault();
+        $('section.main').css('display', 'none');
+        $('section.intro').css('display', 'none');
+        $('section.builder').css('display', 'none');
+        
+        $('section.player_edits').css('display', 'inline-block');
+
+        var position = 'qb';
+        getNewPlayers(position);
+    });
+    
+    $('#player_update').submit(function(event) {
+       event.preventDefault();
+       var player_choice = $("input[name='player']:checked").val();
+       
+       updateUserTeamWithQBID(player_choice);
+
     });
 
 });

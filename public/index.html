@@ -145,107 +145,135 @@
 
             <div class="qb_position">
                 <p>Quarterback</p>
+                <p id="qb_pid">PID:</p>
                 <p id="qb_name">Name:</p>
                 <p id="qb_team">Team:</p>
                 <p id="qb_jersey">Jersey:</p>
                 <p id="qb_qbr">QBR:</p>
-
-                <form>
-                    <input type="submit" value="Edit/Add">
-                </form>
+                
+                <input type="button" id="qb_edit" value="Edit/Add">
             </div>
 
-            <div class="chat">Sports Chat:</div>
+            <!--<div class="chat">Sports Chat:</div>-->
 
-            <div class="rb_position">
+            <div class="rb1_position">
                 <p>Running Back #1</p>
+                <p id="rb1_pid">PID:</p>
                 <p id="rb1_name">Name:</p>
                 <p id="rb1_team">Team:</p>
                 <p id="rb1_jersey">Jersey:</p>
                 <p id="rb1_ypc">YPC:</p>
                 
-                <form>
+                <form id="rb_edit">
                     <input type="submit" value="Edit/Add">
                 </form>
             </div>
 
-            <div class="rb_position">
+            <div class="rb2_position">
                 <p>Running Back #2</p>
+                <p id="rb2_pid">PID:</p>                
                 <p id="rb2_name">Name:</p>
                 <p id="rb2_team">Team:</p>
                 <p id="rb2_jersey">Jersey:</p>
                 <p id="rb2_ypc">YPC:</p>
                 
-                <form>
+                <form id="rb_edit">
                     <input type="submit" value="Edit/Add">
                 </form>
             </div>
 
-            <div class="rb_position">
+            <div class="wr1_position">
                 <p>Wide Receiver #1</p>
+                <p id="wr1_pid">PID:</p>                
                 <p id="wr1_name">Name:</p>
                 <p id="wr1_team">Team:</p>
                 <p id="wr1_jersey">Jersey:</p>
                 <p id="wr1_qbr">QBR:</p>
                 
-                <form>
+                <form id="wr1_edit">
                     <input type="submit" value="Edit/Add">
                 </form>
             </div>
 
-            <div class="rb_position">
+            <div class="wr2_position">
                 <p>Wide Receiver #2</p>
+                <p id="wr2_pid">PID:</p>
                 <p id="wr2_name">Name:</p>
                 <p id="wr2_team">Team:</p>
                 <p id="wr2_jersey">Jersey:</p>
                 <p id="wr2_qbr">QBR:</p>
                 
-                <form>
+                <form id="wr2_edit">
                     <input type="submit" value="Edit/Add">
                 </form>
             </div>
 
-            <div class="rb_position">
+            <div class="wr3_position">
                 <p>Wide Receiver #3</p>
+                <p id="wr3_pid">PID:</p>
                 <p id="wr3_name">Name:</p>
                 <p id="wr3_team">Team:</p>
                 <p id="wr3_jersey">Jersey:</p>
                 <p id="wr3_qbr">QBR:</p>
                 
-                <form>
+                <form id="wr3_edit">
                     <input type="submit" value="Edit/Add">
                 </form>
             </div>
 
             <div class="k_position">Kicker
                 <p>Kicker</p>
+                <p id="k_pid">PID:</p>
                 <p id="k_name">Name:</p>
-                <form>
+                <form id="k_edit">
                     <input type="submit" value="Edit/Add">
                 </form>
             </div>
 
             <div class="def_position">Defense
                 <p>Defense</p>
+                <p id="def_pid">PID:</p>
                 <p id="defense"></p>
-                <form>
+                <form id="def_edit">
                     <input type="submit" value="Edit/Add">
                 </form>
             </div>
 
         </div>
-
-
-
+        
         <div class="ticker">
-            Insert FF ticker here
+            Insert FF ticker here - TODO
         </div>
     </section>
-
     <!--end of main page section-->
+    
+
+    <!--Player Edit Section-->
+    <section class="player_edits">
+        Roster Player Selection/Update:
+        
+        <p class="error"></p>
+        
+        <div class="player_list">
+            <form id="player_update">
+                
+    
+            <p>Choose a player below to add or update. Your previous choice (if any) is automatically selected.</p>
+            <ul id="player_list">
+                <li class="playerlist">
+            </ul>
+
+            <input type="submit" value="Update Roster">
+            <input type="reset" value="Reset">
+            </form>
+            
+        </div>
+        
+    </section>
+    <!--End of Player Edit Section-->
 
 
-
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script type="text/javascript" src="app.js"></script>
 
