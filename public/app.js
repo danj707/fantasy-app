@@ -78,8 +78,27 @@ function newUser(username, password) {
         });
 }
 
-//--getTeam API gets team information, returns as result object
+//--getTeam API gets ALL team information, by position, from multiple API calls
+//--One to QB endpoint - /players/qb/:qb_pid
+//--One to RB endpoint - /players/rb/:rb_pid
+//--One to WR endpoint - /players/wr/:wr_pid
+//--One to K endpoint - /players/k/:k_pid
+//--One to DEF endpoint - /players/def/:def_pid
+//--returns several objects, each has to be parsed out, obtain relevent information and pass to 
 function getTeam() {
+    
+    //define function scope variables to hold the id's/keys of the players in their respective collections
+    //used after the getTeam call to make specific api calls to DB for additional player information
+    var qid;
+    var rb1id;
+    var rb2id;
+    var wr1id;
+    var wr2id;
+    var wr3id;
+    var kid;
+    var defid;
+    var rosterArray = [];
+    
     $.ajax({
             type:"GET",
             url:projectURL + "/teams/" + team_name,
@@ -87,17 +106,120 @@ function getTeam() {
         })
         .done(function (result) {
             if(result) {
-                //Successfully got team information, take to the main page
                 team_id = result._id;
                 current_helmet = result.helmet;
-                displayRoster(result);
+                qid = result.QB;
+                rb1id = result.RB1;
+                rb2id = result.RB2;
+                wr1id = result.WR1;
+                wr2id = result.WR2;
+                wr3id = result.WR3;
+                kid = result.K;
+                defid = result.DEF;
+                
+                //If there is a quarterback ID, API call to endpoint to get QB data
+                if(qid) {
+                        $.ajax({
+                            type:"GET",
+                            url:projectURL + "/players/qb/" + qid,
+                            dataType:'json',
+                        })
+                        .done(function (result) {
+                            if(result) {
+                                rosterArray.push({
+                                    name: result.fname + " " + result.lname,
+                                    jersey : result.jersey,
+                                    real_team: result.real_team,
+                                    height: result.height,
+                                    weight: result.weight,
+                                    college: result.college
+                                })
+                                //rosterArray.push(qb_stats);
+                            } else {
+                                    console.log("This should never fail");
+                            }            
+                        })
+                        .fail(function (jqXHR, error) {
+                            displayRoster(error);
+                        });
+                } else {
+                    qid = "Not set";
+                }
+                
+                
+                if(rb1id) {
+                        $.ajax({
+                            type:"GET",
+                            url:projectURL + "/players/rb/" + rb1id,
+                            dataType:'json',
+                        })
+                        .done(function (result) {
+                            if(result) {
+                                rosterArray.push({
+                                    name: result.fname + " " + result.lname,
+                                    jersey : result.jersey,
+                                    real_team: result.real_team,
+                                    height: result.height,
+                                    weight: result.weight,
+                                    college: result.college
+                                })
+                                //rosterArray.push(qb_stats);
+                            } else {
+                                    console.log("This should never fail");
+                            }            
+                        })
+                        .fail(function (jqXHR, error) {
+                            displayRoster(error);
+                        });
+                  
+                } else {
+                    rb1id = "Not set";
+                }
+                
+                
+                if(rb2id) {
+                    
+                    
+                    
+                }
+                
+                if(wr1id) {
+                    
+                    
+                    
+                }
+                
+                if(wr2id) {
+                    
+                    
+                }
+                
+                if(wr3id) {
+                    
+                    
+                }
+                
+                if(kid) {
+                    
+                    
+                }
+                
+                if(defid) {
+                 
+                 
+                    
+                }
+                
+                //Don't displayRoster yet, wait until all the following ajax calls have returned
+                displayRoster(rosterArray);
             } else {
                 //Search returned null, team doesn't exist - do something here TODO
             }            
         })
         .fail(function (jqXHR, error) {
             displayRoster(error);
-        });    
+        });
+        
 }
 
 //--createTeam API creates team in team table, called from Team Builder
@@ -147,7 +269,7 @@ function updateUserTeam(team_name) {
         });    
 }
 
-//--updateUserTeamWithPlayer API to update the team name by user ID
+//--updateUserTeamWithQBinfo API to update the team name by user ID
 function updateUserTeamWithQBID(player_choice) {
     var q_string = "team_id=" + team_id + "&qb_pid=" + player_choice;
     console.log(q_string);
@@ -227,6 +349,8 @@ function playerUpdatePage(result) {
         for(var i=0;i<result.length;i++) {
             var name = result[i].fname + " " + result[i].lname;
             var real_team = result[i].real_team;
+            var jersey = result[i].jersey;
+            var college = result[i].college;
             
             $('li.playerlist').append("<label id='player_update'><li>" + name + " - " + real_team + "<input type='radio' name='player' value=" + result[i].qb_pid + "></input></li></label>");
         }
@@ -250,7 +374,7 @@ function mainDisplay(result) {
 }
 
 //--Activates main Roster page, makes API call to get the team information
-function displayRoster(result,error) {
+function displayRoster(rosterArray,error) {
     
         $('h2#team_name').text(team_name);
 
@@ -267,16 +391,23 @@ function displayRoster(result,error) {
             $('h1.teamname').text(team_name + " Current Roster");
         }
         
-        $('p#qb_pid').text("PID: " + result.QB);
+        console.log(rosterArray);
 
         
-        $('p#rb1_pid').text("PID: " + result.RB1);
-        $('p#rb2_pid').text("PID: " + result.RB2);
-        $('p#wr1_pid').text("PID: " + result.WR1);
-        $('p#wr2_pid').text("PID: " + result.WR2);
-        $('p#wr3_pid').text("PID: " + result.WR3);
-        $('p#k_pid').text("PID: " + result.K);      
-        $('p#def_pid').text("PID: " + result.DEF);
+        $('p#qb_name').text("Name: " + rosterArray[0].name);
+        $('p#qb_jersey').text("Jersey: " + rosterArray[0].jersey);
+        $('p#qb_team').text("Team: " + rosterArray[0].team);
+        $('p#qb_height').text("Height: " + rosterArray[0].height);
+        $('p#qb_weight').text("Weight: " + rosterArray[0].weight);
+        $('p#qb_college').text("College: " + rosterArray[0].college);
+        
+        // $('p#rb1_pid').text("PID: " + result.RB1);
+        // $('p#rb2_pid').text("PID: " + result.RB2);
+        // $('p#wr1_pid').text("PID: " + result.WR1);
+        // $('p#wr2_pid').text("PID: " + result.WR2);
+        // $('p#wr3_pid').text("PID: " + result.WR3);
+        // $('p#k_pid').text("PID: " + result.K);      
+        // $('p#def_pid').text("PID: " + result.DEF);
 }
 
 //--Main Doc ready function

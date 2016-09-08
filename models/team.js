@@ -17,7 +17,7 @@ var TeamSchema = new mongoose.Schema({
         unique:false,
     },
     QB: {
-        type: String,
+        type:String,
     },
     RB1: {
         type: String,

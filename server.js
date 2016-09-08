@@ -10,6 +10,11 @@ var Team = require('./models/team');
 var User = require('./models/user');
 //var Players = require('./models/players');
 var QB = require('./models/qb_players');
+var RB = require('./models/rb_players');
+var WR = require('./models/wr_players');
+var K = require('./models/k_players');
+var DEF = require('./models/def_players');
+
 
 //serves static files and uses json bodyparser
 app.use(express.static('public'));
@@ -282,7 +287,64 @@ app.get('/players/qb', function(req, res) {
     });
 });
 
-//POST route, adds a player to the DB by position and pid
+
+//GET route, displays a list of all the items in the RB players table
+app.get('/players/rb', function(req, res) {
+    RB.find(function(err, items) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        } else {
+            res.json(items);
+        }
+    });
+});
+
+
+//GET route, displays a list of all the items in the WR players table
+app.get('/players/wr', function(req, res) {
+    WR.find(function(err, items) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        } else {
+            res.json(items);
+        }
+    });
+});
+
+
+//GET route, displays a list of all the items in the K players table
+app.get('/players/k', function(req, res) {
+    K.find(function(err, items) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        } else {
+            res.json(items);
+        }
+    });
+});
+
+
+//GET route, displays a list of all the items in the DEF players table
+app.get('/players/def', function(req, res) {
+    DEF.find(function(err, items) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        } else {
+            res.json(items);
+        }
+    });
+});
+
+
+//POST route, adds a QB to the DB by position and pid
 // - For Dev use only, manual addition of players into DB
 app.post('/players/qb/:qb_pid', function(req, res) {
 //    var qb_pid = res.query.qb_pid;
@@ -308,11 +370,175 @@ app.post('/players/qb/:qb_pid', function(req, res) {
     });
 });
 
+//POST route, adds a RB to the DB by position and pid
+// - For Dev use only, manual addition of players into DB
+app.post('/players/rb/:rb_pid', function(req, res) {
+    RB.create({
+        rb_pid:req.params.rb_pid,
+        position:req.body.position,
+        lname:req.body.lname,
+        fname:req.body.fname,
+        jersey:req.body.jersey,
+        real_team:req.body.real_team,
+        height:req.body.height,
+        weight:req.body.weight,
+        college:req.body.college
+    }, function(err, item) {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        console.log("Created new running back!");
+        return res.json(item);
+    });
+});
+
+//POST route, adds a WR to the DB by position and pid
+// - For Dev use only, manual addition of players into DB
+app.post('/players/wr/:wr_pid', function(req, res) {
+    WR.create({
+        wr_pid:req.params.wr_pid,
+        position:req.body.position,
+        lname:req.body.lname,
+        fname:req.body.fname,
+        jersey:req.body.jersey,
+        real_team:req.body.real_team,
+        height:req.body.height,
+        weight:req.body.weight,
+        college:req.body.college
+    }, function(err, item) {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        console.log("Created new wide receiver!");
+        return res.json(item);
+    });
+});
+
+//POST route, adds a K to the DB by position and pid
+// - For Dev use only, manual addition of players into DB
+app.post('/players/k/:k_pid', function(req, res) {
+    K.create({
+        k_pid:req.params.k_pid,
+        position:req.body.position,
+        lname:req.body.lname,
+        fname:req.body.fname,
+        jersey:req.body.jersey,
+        real_team:req.body.real_team,
+        height:req.body.height,
+        weight:req.body.weight,
+        college:req.body.college
+    }, function(err, item) {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        console.log("Created new kicker!");
+        return res.json(item);
+    });
+});
+
+//POST route, adds a DEF to the DB by position and pid
+// - For Dev use only, manual addition of players into DB
+app.post('/players/def/:def_pid', function(req, res) {
+    DEF.create({
+        def_pid:req.params.def_pid,
+        position:req.body.position,
+        lname:req.body.lname,
+        fname:req.body.fname,
+        jersey:req.body.jersey,
+        real_team:req.body.real_team,
+        height:req.body.height,
+        weight:req.body.weight,
+        college:req.body.college
+    }, function(err, item) {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        console.log("Created new defense!");
+        return res.json(item);
+    });
+});
+
 //GET route, gets a QB from the DB by pid
 app.get('/players/qb/:qb_pid', function(req, res) {
-    var qb_pid = res.body.qb_pid;
+    var qb_pid = req.params.qb_pid;
     QB.findOne({
         qb_pid:qb_pid,
+        }, function(err, items) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        } else {
+            res.json(items);
+        }
+    });
+});
+
+//GET route, gets a RB from the DB by pid
+app.get('/players/rb/:rb_pid', function(req, res) {
+    var rb_pid = req.params.rb_pid;
+    RB.findOne({
+        rb_pid:rb_pid,
+        }, function(err, items) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        } else {
+            res.json(items);
+        }
+    });
+});
+
+//GET route, gets a WR from the DB by pid
+app.get('/players/wr/:wr_pid', function(req, res) {
+    var wr_pid = req.params.wr_pid;
+    WR.findOne({
+        wr_pid:wr_pid,
+        }, function(err, items) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        } else {
+            res.json(items);
+        }
+    });
+});
+
+//GET route, gets a Kicker from the DB by pid
+app.get('/players/k/:k_pid', function(req, res) {
+    var k_pid = req.params.k_pid;
+    K.findOne({
+        k_pid:k_pid,
+        }, function(err, items) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        } else {
+            res.json(items);
+        }
+    });
+});
+
+//GET route, gets a DEF from the DB by pid
+app.get('/players/def/:def_pid', function(req, res) {
+    var def_pid = req.params.def_pid;
+    DEF.findOne({
+        def_pid:def_pid,
         }, function(err, items) {
         if (err) {
             return res.status(500).json({
