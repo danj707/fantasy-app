@@ -99,6 +99,11 @@ div.player_list {
     padding:10px;
 }
 
+.error {
+    size:18px;
+    color:red;
+}
+
 /*ID Rules*/
 
 #player_list {

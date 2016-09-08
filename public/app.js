@@ -118,109 +118,64 @@ function getTeam() {
                 kid = result.K;
                 defid = result.DEF;
                 
-                //If there is a quarterback ID, API call to endpoint to get QB data
-                if(qid) {
-                        $.ajax({
+                $.when( 
+                    $.ajax({
                             type:"GET",
                             url:projectURL + "/players/qb/" + qid,
                             dataType:'json',
-                        })
-                        .done(function (result) {
-                            if(result) {
-                                rosterArray.push({
-                                    name: result.fname + " " + result.lname,
-                                    jersey : result.jersey,
-                                    real_team: result.real_team,
-                                    height: result.height,
-                                    weight: result.weight,
-                                    college: result.college
-                                })
-                                //rosterArray.push(qb_stats);
-                            } else {
-                                    console.log("This should never fail");
-                            }            
-                        })
-                        .fail(function (jqXHR, error) {
-                            displayRoster(error);
-                        });
-                } else {
-                    qid = "Not set";
-                }
-                
-                
-                if(rb1id) {
-                        $.ajax({
+                        }),
+                    $.ajax({
                             type:"GET",
                             url:projectURL + "/players/rb/" + rb1id,
                             dataType:'json',
+                        }),
+                    $.ajax({
+                            type:"GET",
+                            url:projectURL + "/players/rb/" + rb2id,
+                            dataType:'json',
+                        }),
+                    $.ajax({
+                            type:"GET",
+                            url:projectURL + "/players/wr/" + wr1id,
+                            dataType:'json',
+                        }),
+                    $.ajax({
+                            type:"GET",
+                            url:projectURL + "/players/wr/" + wr2id,
+                            dataType:'json',
+                        }),
+                    $.ajax({
+                            type:"GET",
+                            url:projectURL + "/players/wr/" + wr3id,
+                            dataType:'json',
+                        }),
+                    $.ajax({
+                            type:"GET",
+                            url:projectURL + "/players/k/" + kid,
+                            dataType:'json',
+                        }),
+                    $.ajax({
+                            type:"GET",
+                            url:projectURL + "/players/def/" + defid,
+                            dataType:'json',
                         })
-                        .done(function (result) {
-                            if(result) {
-                                rosterArray.push({
-                                    name: result.fname + " " + result.lname,
-                                    jersey : result.jersey,
-                                    real_team: result.real_team,
-                                    height: result.height,
-                                    weight: result.weight,
-                                    college: result.college
-                                })
-                                //rosterArray.push(qb_stats);
-                            } else {
-                                    console.log("This should never fail");
-                            }            
-                        })
-                        .fail(function (jqXHR, error) {
-                            displayRoster(error);
-                        });
-                  
-                } else {
-                    rb1id = "Not set";
-                }
+                        )
+                .done(function(a1,a2,a3,a4,a5,a6,a7,a8) {
+                    console.log(a1[0]);
+                    rosterArray.push(a1[0],a2[0], a3[0], a4[0], a5[0], a6[0], a7[0], a8[0]);
+                    console.log(rosterArray);
+                    displayRoster(rosterArray);
+                })
+                .fail(function() {
+                    console.log("An error in the API checks has occurred."); 
+                });
+            }
                 
-                
-                if(rb2id) {
-                    
-                    
-                    
-                }
-                
-                if(wr1id) {
-                    
-                    
-                    
-                }
-                
-                if(wr2id) {
-                    
-                    
-                }
-                
-                if(wr3id) {
-                    
-                    
-                }
-                
-                if(kid) {
-                    
-                    
-                }
-                
-                if(defid) {
-                 
-                 
-                    
-                }
-                
-                //Don't displayRoster yet, wait until all the following ajax calls have returned
-                displayRoster(rosterArray);
-            } else {
-                //Search returned null, team doesn't exist - do something here TODO
-            }            
         })
         .fail(function (jqXHR, error) {
             displayRoster(error);
         });
-        
+   
 }
 
 //--createTeam API creates team in team table, called from Team Builder
@@ -271,21 +226,106 @@ function updateUserTeam(team_name) {
 }
 
 //--updateUserTeamWithQBinfo API to update the team QB roster PID with new PID
-function updateUserTeamWithID(player_choice) {
-    var q_string = "team_id=" + team_id + "&" + position + "_pid=" + player_choice;
+function updateUserTeamWithQBID(player_choice) {
+    var q_string = "team_id=" + team_id + "&qb_pid=" + player_choice;
+    console.log(q_string);
     $.ajax({
-            url:projectURL + "/team/roster",
+            url:projectURL + "/team/roster/qb",
             type:'PUT',
             data:q_string
         })
         .done(function (result) { //this waits for the ajax to return with a succesful promise object
-            console.log("Update" + position + " in team roster succeeded!");
+            console.log("Updated " + position + " in team roster succeeded!");
             position = '';
             mainDisplay();
         })
         .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
             //TODO - add user error message here
-            console.log("Update" + position + " in team roster failed!");
+            console.log("Updated " + position + " in team roster failed!");
+            position = '';
+        });    
+}
+
+//--updateUserTeamWithRBinfo API to update the team QB roster PID with new PID
+function updateUserTeamWithRBID(choices) {
+    var q_string = "team_id=" + team_id + "&rb1_pid=" + choices[0] + "&rb2_pid=" + choices[1];
+    console.log(q_string);
+    $.ajax({
+            url:projectURL + "/team/roster/rb",
+            type:'PUT',
+            data:q_string
+        })
+        .done(function (result) { //this waits for the ajax to return with a succesful promise object
+            console.log("Updated " + position + " in team roster succeeded!");
+            position = '';
+            mainDisplay();
+        })
+        .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
+            //TODO - add user error message here
+            console.log("Updated " + position + " in team roster failed!");
+            position = '';
+        });    
+}
+
+//--updateUserTeamWithRBinfo API to update the team QB roster PID with new PID
+function updateUserTeamWithWRID(choices) {
+    var q_string = "team_id=" + team_id + "&wr1_pid=" + choices[0] + "&wr2_pid=" + choices[1] + "&wr3_pid=" + choices[2];
+    console.log(q_string);
+    $.ajax({
+            url:projectURL + "/team/roster/wr",
+            type:'PUT',
+            data:q_string
+        })
+        .done(function (result) { //this waits for the ajax to return with a succesful promise object
+            console.log("Updated " + position + " in team roster succeeded!");
+            position = '';
+            mainDisplay();
+        })
+        .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
+            //TODO - add user error message here
+            console.log("Updated " + position + " in team roster failed!");
+            position = '';
+        });    
+}
+
+//--updateUserTeamWithRBinfo API to update the team QB roster PID with new PID
+function updateUserTeamWithKID(choices) {
+    var q_string = "team_id=" + team_id + "&k_pid=" + choices[0];
+    console.log(q_string);
+    $.ajax({
+            url:projectURL + "/team/roster/k",
+            type:'PUT',
+            data:q_string
+        })
+        .done(function (result) { //this waits for the ajax to return with a succesful promise object
+            console.log("Updated " + position + " in team roster succeeded!");
+            position = '';
+            mainDisplay();
+        })
+        .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
+            //TODO - add user error message here
+            console.log("Updated " + position + " in team roster failed!");
+            position = '';
+        });    
+}
+
+//--updateUserTeamWithRBinfo API to update the team QB roster PID with new PID
+function updateUserTeamWithDEFID(choices) {
+    var q_string = "team_id=" + team_id + "&def_pid=" + choices[0];
+    console.log(q_string);
+    $.ajax({
+            url:projectURL + "/team/roster/def",
+            type:'PUT',
+            data:q_string
+        })
+        .done(function (result) { //this waits for the ajax to return with a succesful promise object
+            console.log("Updated " + position + " in team roster succeeded!");
+            position = '';
+            mainDisplay();
+        })
+        .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
+            //TODO - add user error message here
+            console.log("Updated " + position + " in team roster failed!");
             position = '';
         });    
 }
@@ -331,7 +371,6 @@ function getNewPlayers(position) {
                 //Successfully got the player information from table by position, display the update page to make new
                 //choices, update the player's roster, etc
                 playerUpdatePage(result,position);
-                console.log(result);
             } else {
                 //Search returned null, team doesn't exist - do something here TODO
             }            
@@ -349,21 +388,33 @@ function getNewPlayers(position) {
 function playerUpdatePage(result,position) {
         $('li.playerlist').empty();
         for(var i=0;i<result.length;i++) {
-            if(position === 'qb') {
-                var position_pid = result[i].qb_pid;
-            } else if (position === 'rb') {
-                var position_pid = result[i].rb_pid;
-            } else if (position === 'wr') {
-                var position_pid = result[i].wr_pid;
-            }
+            
             var name = result[i].fname + " " + result[i].lname;
             var real_team = result[i].real_team;
-            var jersey = result[i].jersey;
-            var college = result[i].college;
-            
-            $('li.playerlist').append("<label id='player_update'><li>" + name + " - " + real_team + "<input type='radio' name='player' value=" + position_pid + "></input></li></label>");
+
+            if(position === 'qb') {
+                var position_pid = result[i].qb_pid;
+                $('p#notes').text("Pick one quarterback.");
+                $('li.playerlist').append("<label id='player_update'><li>" + name + " - " + real_team + "<input type='radio' name='player' value=" + position_pid + "></input></li></label>");
+            } else if (position === 'rb') {
+                var position_pid = result[i].rb_pid;
+                $('p#notes').text("Pick two runningbacks.");
+                $('li.playerlist').append("<label id='player_update'><li>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + "></input></li></label>");
+            } else if (position === 'wr') {
+                var position_pid = result[i].wr_pid;
+                $('p#notes').text("Pick three wide receivers.");
+                $('li.playerlist').append("<label id='player_update'><li>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + "></input></li></label>");
+            } else if (position === 'k') {
+                var position_pid = result[i].k_pid;
+                $('p#notes').text("Pick one kicker.");
+                $('li.playerlist').append("<label id='player_update'><li>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + "></input></li></label>");
+            } else if (position === 'def') {
+                var position_pid = result[i].def_pid; 
+                $('p#notes').text("Pick one defense.");
+                $('li.playerlist').append("<label id='player_update'><li>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + "></input></li></label>");
+            }
         }
-    
+
 }
 
 //--Activates sections to display the Team Builder Page
@@ -378,7 +429,8 @@ function mainDisplay(result) {
         $('section.intro').css('display', 'none');
         $('section.builder').css('display', 'none');
         $('section.main').css('display', 'block');
-    
+        $('section.player_edits').css('display', 'none');
+
         getTeam(result);
 }
 
@@ -400,16 +452,12 @@ function displayRoster(rosterArray,error) {
             $('h1.teamname').text(team_name + " Current Roster");
         }
         
-        console.log(rosterArray);
-        console.log(rosterArray["0"]);
-
-        
-        // $('p#qb_name').text("Name: " + rosterArray[0].name);
-        // $('p#qb_jersey').text("Jersey: " + rosterArray[0].jersey);
-        // $('p#qb_team').text("Team: " + rosterArray[0].team);
-        // $('p#qb_height').text("Height: " + rosterArray[0].height);
-        // $('p#qb_weight').text("Weight: " + rosterArray[0].weight);
-        // $('p#qb_college').text("College: " + rosterArray[0].college);
+        $('p#qb_name').text("Name: " + rosterArray[0].fname + " " + rosterArray[0].lname);
+        $('p#qb_jersey').text("Jersey: " + rosterArray[0].jersey);
+        $('p#qb_team').text("Team: " + rosterArray[0].team);
+        $('p#qb_height').text("Height: " + rosterArray[0].height);
+        $('p#qb_weight').text("Weight: " + rosterArray[0].weight);
+        $('p#qb_college').text("College: " + rosterArray[0].college);
         
 }
 
@@ -476,18 +524,20 @@ $(document).ready(function () {
     //and add back to the user's team
     $('#qb_edit').click(function(event) {
         event.preventDefault();
+        $('p.error').empty();
         $('section.main').css('display', 'none');
         $('section.intro').css('display', 'none');
         $('section.builder').css('display', 'none');
         
         $('section.player_edits').css('display', 'inline-block');
 
-        var position = 'qb';
+        position = 'qb';
         getNewPlayers(position);
     });
     
     $('#rb_edit').click(function(event) {
         event.preventDefault();
+        $('p.error').empty();
         $('section.main').css('display', 'none');
         $('section.intro').css('display', 'none');
         $('section.builder').css('display', 'none');
@@ -497,9 +547,11 @@ $(document).ready(function () {
         position = 'rb';
         getNewPlayers(position);
     });
+
     
     $('#wr_edit').click(function(event) {
         event.preventDefault();
+        $('p.error').empty();
         $('section.main').css('display', 'none');
         $('section.intro').css('display', 'none');
         $('section.builder').css('display', 'none');
@@ -512,6 +564,7 @@ $(document).ready(function () {
     
     $('#def_edit').click(function(event) {
         event.preventDefault();
+        $('p.error').empty();
         $('section.main').css('display', 'none');
         $('section.intro').css('display', 'none');
         $('section.builder').css('display', 'none');
@@ -524,6 +577,7 @@ $(document).ready(function () {
     
     $('#k_edit').click(function(event) {
         event.preventDefault();
+        $('p.error').empty();
         $('section.main').css('display', 'none');
         $('section.intro').css('display', 'none');
         $('section.builder').css('display', 'none');
@@ -536,10 +590,49 @@ $(document).ready(function () {
     
     $('#player_update').submit(function(event) {
        event.preventDefault();
+       $('p.error').empty();
        var player_choice = $("input[name='player']:checked").val();
        
-       updateUserTeamWithID(player_choice);
+        var choices=[];
+        $.each($("input[name='player']:checked"), function(){            
+            choices.push($(this).val());
+        });
 
+        
+        console.log(position, choices, choices.length);
+       
+       if(position === 'qb') {
+            if(choices.length != 1) {
+              $('p.error').text("Must choose a quarterback"); 
+            } else {
+                updateUserTeamWithQBID(player_choice);
+            }
+       } else if(position === 'rb') {
+           //test for correct number of choices made for RB's
+           if(choices.length != 2) {
+                $('p.error').text("Must choose 2 running backs"); 
+           } else {
+                updateUserTeamWithRBID(choices); 
+           }
+       } else if(position === 'wr') {
+            if(choices.length != 3) {
+                $('p.error').text("Must choose 3 wide receivers");
+           } else {
+                updateUserTeamWithWRID(choices);
+           }
+       } else if(position === 'k') {
+            if(choices.length !=1 ) {
+                $('p.error').text("Must choose 1 kicker");
+           } else {
+                updateUserTeamWithKID(choices);
+           }
+       } else if(position === 'def') {
+            if(choices.length != 1) {
+                $('p.error').text("Must choose 1 defense");
+           } else {
+                updateUserTeamWithDEFID(choices);
+           }           
+       }
     });
 
 });

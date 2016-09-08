@@ -126,46 +126,115 @@ app.put('/team', function(req,res) {
    });
 });
 
-//Updates Team Roster with New Player PID's
+//Updates Team Roster with New Player PID's - DEV USE ONLY
 app.put('/team/roster', function(req,res) {
         var _id = req.body.team_id;
-        var update_string;
-        if(req.body.qb_pid) {
-            var qb_pid = req.body.qb_pid;
-            update_string += "QB:" + qb_pid;
-        }
-        if(req.body.rb1_pid) {
-            var rb1_pid = req.body.rb1_pid;
-            update_string += ",RB1:" + rb1_pid;
-        }
-        if(req.body.rb2_pid) {
-            var rb2_pid = req.body.rb2_pid;
-            update_string += ",RB2:" + rb2_pid;
-        }
-        if(req.body.wr1_pid) {
-            var wr1_pid = req.body.wr1_pid;
-            update_string += ",WR1:" + wr1_pid;
-        }
-        if(req.body.wr2_pid) {
-            var wr2_pid = req.body.wr2_pid;
-            update_string += ",WR2:" + wr2_pid;
-        }
-        if(req.body.wr3_pid) {
-            var wr3_pid = req.body.wr3_pid;
-            update_string += ",WR3:" + wr3_pid;
-        }
-        if(req.body.k_pid) {
-            var k_pid = req.body.k_pid;
-            update_string += ",K:" + k_pid;
-        }
-        if(req.body.def_pid) {
-            var def_pid = req.body.def_pid;
-            update_string += ",DEF:" + def_pid;
-        }
+        var qb_pid = req.body.qb_pid;
+        var rb1_pid = req.body.rb1_pid;
+        var rb2_pid = req.body.rb2_pid;
+        var wr1_pid = req.body.wr1_pid;
+        var wr2_pid = req.body.wr2_pid;
+        var wr3_pid = req.body.wr3_pid;
+        var k_pid = req.body.k_pid;
+        var def_pid = req.body.def_pid;
         
    Team.findOneAndUpdate(
        {_id:_id},
-       {update_string},
+       {"QB":qb_pid,"RB1":rb1_pid,"RB2":rb2_pid,"WR1":wr1_pid,"WR2":wr2_pid,"WR3":wr3_pid,"K":k_pid,"DEF":def_pid},
+       function(err,items) {
+        if (err) {
+            console.log(err);
+             return res.status(500).json({
+                 message: 'Internal Server Error'
+             });
+         }
+         return res.json(items);
+   });
+});
+
+//Updates Team Roster with QB PID only
+app.put('/team/roster/qb', function(req,res) {
+        var _id = req.body.team_id;
+        var qb_pid = req.body.qb_pid;
+        console.log(_id, qb_pid)
+   Team.findOneAndUpdate(
+       {_id:_id},
+       {"QB":qb_pid},
+       function(err,items) {
+        if (err) {
+            console.log(err);
+             return res.status(500).json({
+                 message: 'Internal Server Error'
+             });
+         }
+         return res.json(items);
+   });
+});
+
+//Updates Team Roster with RB PID's only
+app.put('/team/roster/rb', function(req,res) {
+        var _id = req.body.team_id;
+        var rb1_pid = req.body.rb1_pid;
+        var rb2_pid = req.body.rb2_pid;
+   Team.findOneAndUpdate(
+       {_id:_id},
+       {"RB1":rb1_pid,"RB2":rb2_pid},
+       function(err,items) {
+        if (err) {
+            console.log(err);
+             return res.status(500).json({
+                 message: 'Internal Server Error'
+             });
+         }
+         return res.json(items);
+   });
+});
+
+//Updates Team Roster with WR PID's only
+app.put('/team/roster/wr', function(req,res) {
+        var _id = req.body.team_id;
+        var wr1_pid = req.body.wr1_pid;
+        var wr2_pid = req.body.wr2_pid;
+        var wr3_pid = req.body.wr3_pid;
+   Team.findOneAndUpdate(
+       {_id:_id},
+       {"WR1":wr1_pid,"WR2":wr2_pid,"WR3":wr3_pid},
+       function(err,items) {
+        if (err) {
+            console.log(err);
+             return res.status(500).json({
+                 message: 'Internal Server Error'
+             });
+         }
+         return res.json(items);
+   });
+});
+
+//Updates Team Roster with K PID's only
+app.put('/team/roster/k', function(req,res) {
+        var _id = req.body.team_id;
+        var k_pid = req.body.k_pid;
+   Team.findOneAndUpdate(
+       {_id:_id},
+       {"K":k_pid},
+       function(err,items) {
+        if (err) {
+            console.log(err);
+             return res.status(500).json({
+                 message: 'Internal Server Error'
+             });
+         }
+         return res.json(items);
+   });
+});
+
+//Updates Team Roster with DEF PID's only
+app.put('/team/roster/def', function(req,res) {
+        var _id = req.body.team_id;
+        var def_pid = req.body.def_pid;
+   Team.findOneAndUpdate(
+       {_id:_id},
+       {"DEF":def_pid},
        function(err,items) {
         if (err) {
             console.log(err);
