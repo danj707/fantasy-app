@@ -19,6 +19,7 @@ var user_id;
 var team_name;
 var team_id;
 var current_helmet;
+var position;
 
 ////////////////////////////--API Function Calls--//////////////////////////////
 
@@ -269,22 +270,23 @@ function updateUserTeam(team_name) {
         });    
 }
 
-//--updateUserTeamWithQBinfo API to update the team name by user ID
-function updateUserTeamWithQBID(player_choice) {
-    var q_string = "team_id=" + team_id + "&qb_pid=" + player_choice;
-    console.log(q_string);
+//--updateUserTeamWithQBinfo API to update the team QB roster PID with new PID
+function updateUserTeamWithID(player_choice) {
+    var q_string = "team_id=" + team_id + "&" + position + "_pid=" + player_choice;
     $.ajax({
             url:projectURL + "/team/roster",
             type:'PUT',
             data:q_string
         })
         .done(function (result) { //this waits for the ajax to return with a succesful promise object
-            console.log("Update team name succeeded!");
+            console.log("Update" + position + " in team roster succeeded!");
+            position = '';
             mainDisplay();
         })
         .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
             //TODO - add user error message here
-            console.log("Update teamname failed!");
+            console.log("Update" + position + " in team roster failed!");
+            position = '';
         });    
 }
 
@@ -328,7 +330,7 @@ function getNewPlayers(position) {
             if(result) {
                 //Successfully got the player information from table by position, display the update page to make new
                 //choices, update the player's roster, etc
-                playerUpdatePage(result);
+                playerUpdatePage(result,position);
                 console.log(result);
             } else {
                 //Search returned null, team doesn't exist - do something here TODO
@@ -344,15 +346,22 @@ function getNewPlayers(position) {
 
 //--Display the player update page, generic for position, etc.  Displays form handler for adding/updating players
 //--to team roster
-function playerUpdatePage(result) {
+function playerUpdatePage(result,position) {
         $('li.playerlist').empty();
         for(var i=0;i<result.length;i++) {
+            if(position === 'qb') {
+                var position_pid = result[i].qb_pid;
+            } else if (position === 'rb') {
+                var position_pid = result[i].rb_pid;
+            } else if (position === 'wr') {
+                var position_pid = result[i].wr_pid;
+            }
             var name = result[i].fname + " " + result[i].lname;
             var real_team = result[i].real_team;
             var jersey = result[i].jersey;
             var college = result[i].college;
             
-            $('li.playerlist').append("<label id='player_update'><li>" + name + " - " + real_team + "<input type='radio' name='player' value=" + result[i].qb_pid + "></input></li></label>");
+            $('li.playerlist').append("<label id='player_update'><li>" + name + " - " + real_team + "<input type='radio' name='player' value=" + position_pid + "></input></li></label>");
         }
     
 }
@@ -392,22 +401,16 @@ function displayRoster(rosterArray,error) {
         }
         
         console.log(rosterArray);
+        console.log(rosterArray["0"]);
 
         
-        $('p#qb_name').text("Name: " + rosterArray[0].name);
-        $('p#qb_jersey').text("Jersey: " + rosterArray[0].jersey);
-        $('p#qb_team').text("Team: " + rosterArray[0].team);
-        $('p#qb_height').text("Height: " + rosterArray[0].height);
-        $('p#qb_weight').text("Weight: " + rosterArray[0].weight);
-        $('p#qb_college').text("College: " + rosterArray[0].college);
+        // $('p#qb_name').text("Name: " + rosterArray[0].name);
+        // $('p#qb_jersey').text("Jersey: " + rosterArray[0].jersey);
+        // $('p#qb_team').text("Team: " + rosterArray[0].team);
+        // $('p#qb_height').text("Height: " + rosterArray[0].height);
+        // $('p#qb_weight').text("Weight: " + rosterArray[0].weight);
+        // $('p#qb_college').text("College: " + rosterArray[0].college);
         
-        // $('p#rb1_pid').text("PID: " + result.RB1);
-        // $('p#rb2_pid').text("PID: " + result.RB2);
-        // $('p#wr1_pid').text("PID: " + result.WR1);
-        // $('p#wr2_pid').text("PID: " + result.WR2);
-        // $('p#wr3_pid').text("PID: " + result.WR3);
-        // $('p#k_pid').text("PID: " + result.K);      
-        // $('p#def_pid').text("PID: " + result.DEF);
 }
 
 //--Main Doc ready function
@@ -483,11 +486,59 @@ $(document).ready(function () {
         getNewPlayers(position);
     });
     
+    $('#rb_edit').click(function(event) {
+        event.preventDefault();
+        $('section.main').css('display', 'none');
+        $('section.intro').css('display', 'none');
+        $('section.builder').css('display', 'none');
+        
+        $('section.player_edits').css('display', 'inline-block');
+
+        position = 'rb';
+        getNewPlayers(position);
+    });
+    
+    $('#wr_edit').click(function(event) {
+        event.preventDefault();
+        $('section.main').css('display', 'none');
+        $('section.intro').css('display', 'none');
+        $('section.builder').css('display', 'none');
+        
+        $('section.player_edits').css('display', 'inline-block');
+
+        position = 'wr';
+        getNewPlayers(position);
+    });
+    
+    $('#def_edit').click(function(event) {
+        event.preventDefault();
+        $('section.main').css('display', 'none');
+        $('section.intro').css('display', 'none');
+        $('section.builder').css('display', 'none');
+        
+        $('section.player_edits').css('display', 'inline-block');
+
+        position = 'def';
+        getNewPlayers(position);
+    });
+    
+    $('#k_edit').click(function(event) {
+        event.preventDefault();
+        $('section.main').css('display', 'none');
+        $('section.intro').css('display', 'none');
+        $('section.builder').css('display', 'none');
+        
+        $('section.player_edits').css('display', 'inline-block');
+
+        position = 'k';
+        getNewPlayers(position);
+    });
+    
     $('#player_update').submit(function(event) {
        event.preventDefault();
        var player_choice = $("input[name='player']:checked").val();
        
-       updateUserTeamWithQBID(player_choice);
+       updateUserTeamWithID(player_choice);
 
     });
 

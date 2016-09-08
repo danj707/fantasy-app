@@ -129,18 +129,43 @@ app.put('/team', function(req,res) {
 //Updates Team Roster with New Player PID's
 app.put('/team/roster', function(req,res) {
         var _id = req.body.team_id;
-        var qb_pid = req.body.qb_pid;
-        var rb1_pid = req.body.rb1_pid;
-        var rb2_pid = req.body.rb2_pid;
-        var wr1_pid = req.body.wr1_pid;
-        var wr2_pid = req.body.wr2_pid;
-        var wr3_pid = req.body.wr3_pid;
-        var k_pid = req.body.k_pid;
-        var def_pid = req.body.def_pid;
+        var update_string;
+        if(req.body.qb_pid) {
+            var qb_pid = req.body.qb_pid;
+            update_string += "QB:" + qb_pid;
+        }
+        if(req.body.rb1_pid) {
+            var rb1_pid = req.body.rb1_pid;
+            update_string += ",RB1:" + rb1_pid;
+        }
+        if(req.body.rb2_pid) {
+            var rb2_pid = req.body.rb2_pid;
+            update_string += ",RB2:" + rb2_pid;
+        }
+        if(req.body.wr1_pid) {
+            var wr1_pid = req.body.wr1_pid;
+            update_string += ",WR1:" + wr1_pid;
+        }
+        if(req.body.wr2_pid) {
+            var wr2_pid = req.body.wr2_pid;
+            update_string += ",WR2:" + wr2_pid;
+        }
+        if(req.body.wr3_pid) {
+            var wr3_pid = req.body.wr3_pid;
+            update_string += ",WR3:" + wr3_pid;
+        }
+        if(req.body.k_pid) {
+            var k_pid = req.body.k_pid;
+            update_string += ",K:" + k_pid;
+        }
+        if(req.body.def_pid) {
+            var def_pid = req.body.def_pid;
+            update_string += ",DEF:" + def_pid;
+        }
         
    Team.findOneAndUpdate(
        {_id:_id},
-       {QB:qb_pid,RB1:rb1_pid,RB2:rb2_pid,WR1:wr1_pid,WR2:wr2_pid,WR3:wr3_pid,K:k_pid,DEF:def_pid},
+       {update_string},
        function(err,items) {
         if (err) {
             console.log(err);
