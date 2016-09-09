@@ -12,9 +12,6 @@ body {
     background-size: auto;
 }
 
-a#builder {
-    color:white;
-}
 
 html {
     font-family: 'Graduate', cursive;
@@ -30,6 +27,18 @@ h2 {
     color: white;
     font-size: 20px;
     display: inline-block;
+}
+
+h3 {
+    color:white;
+}
+
+button input[type=submit] {
+    padding:5px 15px; 
+    background:#ccc; 
+    cursor:pointer;
+    font-size:12px;
+    border-radius: 5px; 
 }
 
 section.main {
@@ -79,11 +88,25 @@ div.nav {
     text-align: center;
 }
 
-div.position {
-    border: 2px ridge darkgray;
-    display: inline-block;
-    width: 75%;
+.qb_position {
+    border: 5px ridge darkgray;
     padding: 5px;
+    background:lightblue;
+}
+
+.rb1_position,
+.rb2_position {
+    border: 5px ridge darkgray;
+    padding: 5px;
+    background:lightsalmon;
+}
+
+.wr1_position,
+.wr2_position,
+.wr3_position {
+    border: 5px ridge darkgray;
+    padding: 5px;
+    background:lightskyblue;
 }
 
 div.teaminfo {
@@ -106,23 +129,29 @@ div.player_list {
 
 /*ID Rules*/
 
+#builder {
+    color:white;
+}
+
 #player_list {
     padding:5px;
     list-style: none;
 }
 
 #login {
-    width: 50%;
-    border-radius: 3px;
+    width: 40%;
+    border-radius: 5px;
     background: lightgray;
     padding: 15px;
     margin: auto;
     overflow-wrap: normal;
 }
 
+
+
 #new_user {
-    width: 50%;
-    border-radius: 3px;
+    width: 40%;
+    border-radius: 5px;
     background: lightgray;
     padding: 15px;
     margin: auto;
@@ -167,9 +196,9 @@ img.helmet_logo {
 /*TEAM BUILDER PAGE - 2ND PAGE*/
 
 .builder {
-    display: inline-block;
-    text-align: center;
-    width: 80%;
+    text-align:center;
+    display:block;
+    width: 65%;
     background:lightgray;
     padding:10px;
     margin:auto;
@@ -178,17 +207,16 @@ img.helmet_logo {
 /*MAIN DISPLAY PAGE*/
 
 .main {
-    display: none;
+    display:none;
     margin:auto;
     width:80%;
 }
 
 /*Player Editing Page*/
 .player_edits {
-    display: inline-block;
+    display:inline-block;
     text-align: center;
     width: 80%;
-    display: none;
     border-radius:3px;
     background:lightgray;
     margin:auto;

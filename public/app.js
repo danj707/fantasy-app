@@ -420,7 +420,7 @@ function playerUpdatePage(result,position) {
 //--Activates sections to display the Team Builder Page
 function genBuilder() {
         $('section.intro').css('display', 'none');
-        $('section.builder').css('display', 'inline-block');
+        $('section.builder').css('display', 'block');
         //API call handled by document code
 }
 
@@ -454,7 +454,7 @@ function displayRoster(rosterArray,error) {
         
         $('p#qb_name').text("Name: " + rosterArray[0].fname + " " + rosterArray[0].lname);
         $('p#qb_jersey').text("Jersey: " + rosterArray[0].jersey);
-        $('p#qb_team').text("Team: " + rosterArray[0].team);
+        $('p#qb_team').text("Team: " + rosterArray[0].real_team);
         $('p#qb_height').text("Height: " + rosterArray[0].height);
         $('p#qb_weight').text("Weight: " + rosterArray[0].weight);
         $('p#qb_college').text("College: " + rosterArray[0].college);
