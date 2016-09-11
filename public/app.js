@@ -2,15 +2,8 @@
 
 /* global $ */
 
-//--TODO START
-
-//Change getTeam to query each table by player ID, and return result -
-//currently it queries the team table and returns the PID
-
-//--TODO END
-
 //--Sets global project name in api call, useful if we change servers, etc
-var projectURL = 'https://fantasy-app-danj707.c9users.io';
+var projectURL = 'https://fantasy-app-danj707.c9users.io:8080';
 
 //--Define globals to be set after user logs in or signs up, removes need to
 //pass around result object
@@ -20,6 +13,42 @@ var team_name;
 var team_id;
 var current_helmet;
 var position;
+
+//List of NFL teams, and their nfl logo images
+var nflTEAMS = {
+    BAL : ["bal.png"],
+    CIN: ["cin.png"],
+    CLE: ["cle.png"],
+    PIT: ["pit.png"],
+    CHI: ["chi.png"],
+    DET: ["det.png"],
+    GB:["gb.png"],
+    MIN:["min.png"],
+    HOU:["hou.png"],
+    IND:["ind.png"],
+    JAC:["jax.png"],
+    TEN:["ten.png"],
+    ATL:["atl.png"],
+    CAR:["car.png"],
+    NO:["no.png"],
+    TB:["tb.png"],
+    BUF:["buf.png"],
+    DAL:["dal.png"],
+    MIA:["mia.png"],
+    NYG:["nyg.png"],
+    NE:["ne.png"],
+    PHI:["phi.png"],
+    NYJ:["nyj.png"],
+    WSH:["wsh.png"],
+    DEN:["den.png"],
+    ARI:["ari.png"],
+    KC:["kc.png"],
+    LA:["la.png"],
+    OAK:["oak.png"],
+    SF:["sf.png"],
+    SD:["sd.png"],
+    SEA:["sea.png"],
+};
 
 ////////////////////////////--API Function Calls--//////////////////////////////
 
@@ -31,7 +60,7 @@ function loginUser(username, password) {
         'password':password
     };
     $.ajax({
-            type:"GET",
+            type:"POST",
             url:projectURL + "/login",
             data: q_string,
             dataType:'json',
@@ -58,9 +87,14 @@ function loginUser(username, password) {
 //--newUser API to create a new user from login/signup main page
 function newUser(username, password) {
     $('p.error').empty();
+    var q_string = {
+        'username':username,
+        'password':password
+    };    
     $.ajax({
             type:"POST",
-            url:projectURL + "/users/create?username=" + username + "&password=" + password,
+            url:projectURL + "/users/create",
+            data: q_string,
             dataType:'json',
         })
         .done(function (result) {
@@ -161,9 +195,7 @@ function getTeam() {
                         })
                         )
                 .done(function(a1,a2,a3,a4,a5,a6,a7,a8) {
-                    console.log(a1[0]);
                     rosterArray.push(a1[0],a2[0], a3[0], a4[0], a5[0], a6[0], a7[0], a8[0]);
-                    console.log(rosterArray);
                     displayRoster(rosterArray);
                 })
                 .fail(function() {
@@ -175,7 +207,6 @@ function getTeam() {
         .fail(function (jqXHR, error) {
             displayRoster(error);
         });
-   
 }
 
 //--createTeam API creates team in team table, called from Team Builder
@@ -189,7 +220,6 @@ function createTeam(teamname,helmet) {
             data:q_string,
         })
         .done(function (result) { //
-            console.log("Team creation successful!");
             //Sets several global variables if the team creation was successful
             team_name = result.team_name;
             team_id = result._id;
@@ -202,7 +232,6 @@ function createTeam(teamname,helmet) {
             mainDisplay(result);
         })
         .fail(function (jqXHR, error) {
-            console.log("Team creation failure!");
             $('p.error').text("An error occurred, please try again.");
         });    
 }
@@ -216,11 +245,9 @@ function updateUserTeam(team_name) {
             data:q_string
         })
         .done(function (result) { //this waits for the ajax to return with a succesful promise object
-            console.log("Update team name succeeded!");
             mainDisplay();
         })
         .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
-            //TODO - add user error message here
             console.log("Update teamname failed!");
         });    
 }
@@ -228,7 +255,6 @@ function updateUserTeam(team_name) {
 //--updateUserTeamWithQBinfo API to update the team QB roster PID with new PID
 function updateUserTeamWithQBID(player_choice) {
     var q_string = "team_id=" + team_id + "&qb_pid=" + player_choice;
-    console.log(q_string);
     $.ajax({
             url:projectURL + "/team/roster/qb",
             type:'PUT',
@@ -249,20 +275,16 @@ function updateUserTeamWithQBID(player_choice) {
 //--updateUserTeamWithRBinfo API to update the team QB roster PID with new PID
 function updateUserTeamWithRBID(choices) {
     var q_string = "team_id=" + team_id + "&rb1_pid=" + choices[0] + "&rb2_pid=" + choices[1];
-    console.log(q_string);
     $.ajax({
             url:projectURL + "/team/roster/rb",
             type:'PUT',
             data:q_string
         })
         .done(function (result) { //this waits for the ajax to return with a succesful promise object
-            console.log("Updated " + position + " in team roster succeeded!");
             position = '';
             mainDisplay();
         })
         .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
-            //TODO - add user error message here
-            console.log("Updated " + position + " in team roster failed!");
             position = '';
         });    
 }
@@ -270,20 +292,16 @@ function updateUserTeamWithRBID(choices) {
 //--updateUserTeamWithRBinfo API to update the team QB roster PID with new PID
 function updateUserTeamWithWRID(choices) {
     var q_string = "team_id=" + team_id + "&wr1_pid=" + choices[0] + "&wr2_pid=" + choices[1] + "&wr3_pid=" + choices[2];
-    console.log(q_string);
     $.ajax({
             url:projectURL + "/team/roster/wr",
             type:'PUT',
             data:q_string
         })
         .done(function (result) { //this waits for the ajax to return with a succesful promise object
-            console.log("Updated " + position + " in team roster succeeded!");
             position = '';
             mainDisplay();
         })
         .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
-            //TODO - add user error message here
-            console.log("Updated " + position + " in team roster failed!");
             position = '';
         });    
 }
@@ -291,20 +309,16 @@ function updateUserTeamWithWRID(choices) {
 //--updateUserTeamWithRBinfo API to update the team QB roster PID with new PID
 function updateUserTeamWithKID(choices) {
     var q_string = "team_id=" + team_id + "&k_pid=" + choices[0];
-    console.log(q_string);
     $.ajax({
             url:projectURL + "/team/roster/k",
             type:'PUT',
             data:q_string
         })
         .done(function (result) { //this waits for the ajax to return with a succesful promise object
-            console.log("Updated " + position + " in team roster succeeded!");
             position = '';
             mainDisplay();
         })
         .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
-            //TODO - add user error message here
-            console.log("Updated " + position + " in team roster failed!");
             position = '';
         });    
 }
@@ -312,20 +326,16 @@ function updateUserTeamWithKID(choices) {
 //--updateUserTeamWithRBinfo API to update the team QB roster PID with new PID
 function updateUserTeamWithDEFID(choices) {
     var q_string = "team_id=" + team_id + "&def_pid=" + choices[0];
-    console.log(q_string);
     $.ajax({
             url:projectURL + "/team/roster/def",
             type:'PUT',
             data:q_string
         })
         .done(function (result) { //this waits for the ajax to return with a succesful promise object
-            console.log("Updated " + position + " in team roster succeeded!");
             position = '';
             mainDisplay();
         })
         .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
-            //TODO - add user error message here
-            console.log("Updated " + position + " in team roster failed!");
             position = '';
         });    
 }
@@ -349,11 +359,8 @@ function editTeam(teamname,helmet) {
             
             //Display the main page
             mainDisplay(result);
-            console.log("Update team info succeeded!");
         })
         .fail(function (jqXHR, error) {
-            console.log(jqXHR);
-            console.log("Update team info failed!");
             $('p.error').text("An error occurred, please try again.");
         });    
 }
@@ -377,7 +384,6 @@ function getNewPlayers(position) {
         })
         .fail(function (jqXHR, error) {
             $('p.error').text("Sorry, a database error occurred, try again later.");
-            console.log(error);
         });
         
 
@@ -386,7 +392,7 @@ function getNewPlayers(position) {
 //--Display the player update page, generic for position, etc.  Displays form handler for adding/updating players
 //--to team roster
 function playerUpdatePage(result,position) {
-        $('li.playerlist').empty();
+        $('ul.player_list').empty();
         for(var i=0;i<result.length;i++) {
             
             var name = result[i].fname + " " + result[i].lname;
@@ -395,23 +401,35 @@ function playerUpdatePage(result,position) {
             if(position === 'qb') {
                 var position_pid = result[i].qb_pid;
                 $('p#notes').text("Pick one quarterback.");
-                $('li.playerlist').append("<label id='player_update'><li>" + name + " - " + real_team + "<input type='radio' name='player' value=" + position_pid + "></input></li></label>");
+                if(result[i].link) {
+                    $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='radio' name='player' value=" + position_pid + "></input><a id='outlink' href=" + result[i].link + " target=_blank>NFL.Com Stats-<i class='fa fa-external-link' aria-hidden='true'></a></i></li></label>");
+                } else {
+                    $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='radio' name='player' value=" + position_pid + "></input></li></label>");
+                }
             } else if (position === 'rb') {
                 var position_pid = result[i].rb_pid;
                 $('p#notes').text("Pick two runningbacks.");
-                $('li.playerlist').append("<label id='player_update'><li>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + "></input></li></label>");
+                if(result[i].link) {
+                    $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + "></input><a id='outlink' href=" + result[i].link + " target=_blank>NFL.Com Stats-<i class='fa fa-external-link' aria-hidden='true'></a></i></li></label>");
+                } else {
+                    $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + "></input></li></label>");
+                }
             } else if (position === 'wr') {
                 var position_pid = result[i].wr_pid;
                 $('p#notes').text("Pick three wide receivers.");
-                $('li.playerlist').append("<label id='player_update'><li>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + "></input></li></label>");
+                if(result[i].link) {
+                    $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + "></input><a id='outlink' href=" + result[i].link + " target=_blank>NFL.Com Stats-<i class='fa fa-external-link' aria-hidden='true'></a></i></li></label>");
+                } else {
+                    $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + "></input></li></label>");
+                }
             } else if (position === 'k') {
                 var position_pid = result[i].k_pid;
                 $('p#notes').text("Pick one kicker.");
-                $('li.playerlist').append("<label id='player_update'><li>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + "></input></li></label>");
+                $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + "></input></li></label>");
             } else if (position === 'def') {
                 var position_pid = result[i].def_pid; 
                 $('p#notes').text("Pick one defense.");
-                $('li.playerlist').append("<label id='player_update'><li>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + "></input></li></label>");
+                $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + "></input></li></label>");
             }
         }
 
@@ -421,6 +439,14 @@ function playerUpdatePage(result,position) {
 function genBuilder() {
         $('section.intro').css('display', 'none');
         $('section.builder').css('display', 'block');
+        $('section.new_account').css('display','none');
+        
+        if(team_name) {
+            $('input#teamname').attr('placeholder',team_name);
+        } else {
+            $('h2#builder_notify').html("Welcome " + user_name + "! Choose a fantasy team name:");
+            $('input#teamname').attr('placeholder','teamname');   
+        }
         //API call handled by document code
 }
 
@@ -435,6 +461,7 @@ function mainDisplay(result) {
 }
 
 //--Activates main Roster page, makes API call to get the team information
+//--This is the #1 section I'd like to refactor, version 1.1.  Clean up this code.
 function displayRoster(rosterArray,error) {
     
         $('h2#team_name').text(team_name);
@@ -452,18 +479,185 @@ function displayRoster(rosterArray,error) {
             $('h1.teamname').text(team_name + " Current Roster");
         }
         
-        $('p#qb_name').text("Name: " + rosterArray[0].fname + " " + rosterArray[0].lname);
-        $('p#qb_jersey').text("Jersey: " + rosterArray[0].jersey);
-        $('p#qb_team').text("Team: " + rosterArray[0].real_team);
-        $('p#qb_height').text("Height: " + rosterArray[0].height);
-        $('p#qb_weight').text("Weight: " + rosterArray[0].weight);
-        $('p#qb_college').text("College: " + rosterArray[0].college);
+        //------------------Quarterback-------------------------//
         
+        if (!rosterArray[0].real_team) {
+            var qb_team_image = "nfl.jpg";
+        } else {
+            var qb_team = rosterArray[0].real_team;
+            var eval_str = 'nflTEAMS.' + qb_team + '[0]';
+            var qb_team_image = eval(eval_str);
+        }
+
+        if(rosterArray[0].real_team) {
+            var q_href_link = "https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=" + rosterArray[0].fname + rosterArray[0].lname;
+            $('.qb_position').css("background-image","url(images/" + qb_team_image + ")");
+            $('p#qb_name').html('<a href=' + "" + q_href_link + "" + ' target=_blank>' + rosterArray[0].fname + " " + rosterArray[0].lname + "</a>" + " (" + rosterArray[0].jersey +  ")");
+            $('p#qb_team').text("Team: " + rosterArray[0].real_team);
+            $('p#qb_stats').text("Height: " + rosterArray[0].height + ", Weight: " + rosterArray[0].weight);
+            $('p#qb_college').text("College: " + rosterArray[0].college);
+        } else {
+            $('.qb_position').css("background-image","url(images/" + qb_team_image + ")");
+            $('p#qb_name').text("Not set");           
+        }
+        
+        //------------------Running back-------------------------//
+        
+        if (!rosterArray[1].real_team) {
+            var image_loc = "nfl.jpg";
+        } else {
+            var rb1_team = rosterArray[1].real_team;
+            var eval_str = 'nflTEAMS.' + rb1_team + '[0]';
+            var image_loc = eval(eval_str);
+        }
+        
+        if(rosterArray[1].real_team) {
+            var rb1_href_link = "https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=" + rosterArray[1].fname + rosterArray[1].lname;
+            $('.rb1_position').css("background-image","url(images/" + image_loc + ")");
+            $('p#rb1_name').html('<a href=' + "" + rb1_href_link + "" + ' target=_blank>' + rosterArray[1].fname + " " + rosterArray[1].lname + "</a>" + " (" + rosterArray[1].jersey +  ")");
+            $('p#rb1_jersey').text("Jersey: " + rosterArray[1].jersey);
+            $('p#rb1_team').text("Team: " + rosterArray[1].real_team);
+            $('p#rb1_height').text("Height: " + rosterArray[1].height);
+            $('p#rb1_stats').text("Height: " + rosterArray[1].height + ", Weight: " + rosterArray[1].weight);
+            $('p#rb1_college').text("College: " + rosterArray[1].college);
+        } else {
+            $('.rb1_position').css("background-image","url(images/" + image_loc + ")");
+            $('p#rb1_name').text("Not set");                
+        }   
+        
+        //------------------ RB2 -----------------------//
+        
+        if (!rosterArray[2].real_team) {
+            var image_loc = "nfl.jpg";
+        } else {
+            var rb2_team = rosterArray[2].real_team;
+            var eval_str = 'nflTEAMS.' + rb2_team + '[0]';
+            var image_loc = eval(eval_str);
+        }
+        
+        if(rosterArray[2].real_team) {
+            var rb2_href_link = "https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=" + rosterArray[2].fname + rosterArray[2].lname;
+            $('.rb2_position').css("background-image","url(images/" + image_loc + ")");
+            $('p#rb2_name').html('<a href=' + "" + rb2_href_link + "" + ' target=_blank>' + rosterArray[2].fname + " " + rosterArray[2].lname + "</a>" + " (" + rosterArray[2].jersey +  ")");
+            $('p#rb2_jersey').text("Jersey: " + rosterArray[2].jersey);
+            $('p#rb2_team').text("Team: " + rosterArray[2].real_team);
+            $('p#rb2_stats').text("Height: " + rosterArray[2].height + ", Weight: " + rosterArray[2].weight);
+            $('p#rb2_college').text("College: " + rosterArray[2].college);
+        } else {
+            $('.rb2_position').css("background-image","url(images/" + image_loc + ")");
+            $('p#rb2_name').text("Not set");                
+        }  
+
+        //------------------ WR1 -----------------------//
+
+        if (!rosterArray[3].real_team) {
+            var image_loc = "nfl.jpg";
+        } else {
+            var wr1_team = rosterArray[3].real_team;
+            var eval_str = 'nflTEAMS.' + wr1_team + '[0]';
+            var image_loc = eval(eval_str);
+        }
+        if(rosterArray[3].real_team) {
+            var wr1_href_link = "https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=" + rosterArray[3].fname + rosterArray[3].lname;
+            $('.wr1_position').css("background-image","url(images/" + image_loc + ")");
+            $('p#wr1_name').html('<a href=' + "" + wr1_href_link + "" + ' target=_blank>' + rosterArray[3].fname + " " + rosterArray[3].lname + "</a>" + " (" + rosterArray[3].jersey +  ")");
+            $('p#wr1_jersey').text("Jersey: " + rosterArray[3].jersey);
+            $('p#wr1_team').text("Team: " + rosterArray[3].real_team);
+            $('p#wr1_stats').text("Height: " + rosterArray[3].height + ", Weight: " + rosterArray[3].weight);
+            $('p#wr1_college').text("College: " + rosterArray[3].college);
+        } else {
+            $('.wr1_position').css("background-image","url(images/" + image_loc + ")");
+            $('p#wr1_name').text("Not set");             
+        }
+
+        //------------------ WR2 -----------------------//
+
+        if (!rosterArray[4].real_team) {
+            var image_loc = "nfl.jpg";
+        } else {
+            var wr2_team = rosterArray[4].real_team;
+            var eval_str = 'nflTEAMS.' + wr2_team + '[0]';
+            var image_loc = eval(eval_str);
+        }
+        if(rosterArray[4].real_team) {
+            var wr2_href_link = "https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=" + rosterArray[4].fname + rosterArray[4].lname;
+            $('p#wr2_name').html('<a href=' + "" + wr2_href_link + "" + ' target=_blank>' + rosterArray[4].fname + " " + rosterArray[4].lname + "</a>" + " (" + rosterArray[4].jersey +  ")");        $('.wr2_position').css("background-image","url(images/" + image_loc + ")");
+            $('p#wr2_jersey').text("Jersey: " + rosterArray[4].jersey);
+            $('p#wr2_team').text("Team: " + rosterArray[4].real_team);
+            $('p#wr2_stats').text("Height: " + rosterArray[4].height + ", Weight: " + rosterArray[4].weight);
+            $('p#wr2_college').text("College: " + rosterArray[4].college);  
+        } else {
+            $('.wr2_position').css("background-image","url(images/" + image_loc + ")");
+            $('p#wr2_name').text("Not set");                                
+        }        
+        
+        //------------------ WR3 -----------------------//
+
+        if (!rosterArray[5].real_team) {
+            var image_loc = "nfl.jpg";
+        } else {
+            var wr3_team = rosterArray[5].real_team;
+            var eval_str = 'nflTEAMS.' + wr3_team + '[0]';
+            var image_loc = eval(eval_str);
+        }    
+        if(rosterArray[5].real_team) {
+            var wr3_href_link = "https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=" + rosterArray[5].fname + rosterArray[5].lname;
+            $('.wr3_position').css("background-image","url(images/" + image_loc + ")");
+            $('p#wr3_name').html('<a href=' + "" + wr3_href_link + "" + ' target=_blank>' + rosterArray[5].fname + " " + rosterArray[5].lname + "</a>" + " (" + rosterArray[5].jersey +  ")");
+            $('p#wr3_jersey').text("Jersey: " + rosterArray[5].jersey);
+            $('p#wr3_team').text("Team: " + rosterArray[5].real_team);
+            $('p#wr3_stats').text("Height: " + rosterArray[5].height + ", Weight: " + rosterArray[5].weight);
+            $('p#wr3_college').text("College: " + rosterArray[5].college);        
+        } else {
+            $('.wr3_position').css("background-image","url(images/" + image_loc + ")");
+            $('p#wr3_name').text("Not set");                 
+        }
+
+        //------------------ Kicker -----------------------//
+
+        if (!rosterArray[6].real_team) {
+            var image_loc = "nfl.jpg";
+        } else {
+            var k_team = rosterArray[6].real_team;
+            var eval_str = 'nflTEAMS.' + k_team + '[0]';
+            var image_loc = eval(eval_str);
+        }     
+        if(rosterArray[6].real_team) {
+            var k_href_link = "https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=" + rosterArray[6].fname + rosterArray[6].lname;
+            $('.k_position').css("background-image","url(images/" + image_loc + ")");
+            $('p#k_name').html('<a href=' + "" + k_href_link + "" + ' target=_blank>' + rosterArray[6].fname + " " + rosterArray[6].lname + "</a>" + " (" + rosterArray[6].jersey +  ")");
+            $('p#k_jersey').text("Jersey: " + rosterArray[6].jersey);
+            $('p#k_team').text("Team: " + rosterArray[6].real_team);
+            $('p#k_stats').text("Height: " + rosterArray[6].height + ", Weight: " + rosterArray[6].weight);
+            $('p#k_college').text("College: " + rosterArray[6].college);
+        } else {
+            $('.k_position').css("background-image","url(images/" + image_loc + ")");
+            $('p#k_name').text("Not set");            
+        }
+
+        //------------------ Defense -----------------------//
+
+        if (!rosterArray[7].real_team) {
+            var image_loc = "nfl.jpg";
+        } else {
+            var def_team = rosterArray[7].real_team;
+            var eval_str = 'nflTEAMS.' + def_team + '[0]';
+            var image_loc = eval(eval_str);
+        }
+        if(rosterArray[7].real_team) {
+            var def_href_link = "https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=" + rosterArray[7].fname + rosterArray[7].lname;
+            $('.def_position').css("background-image","url(images/" + image_loc + ")");
+            $('p#def_name').html('<a href=' + "" + def_href_link + "" + ' target=_blank>' + rosterArray[7].fname + " " + rosterArray[7].lname + "</a>");
+        } else {
+            $('.def_position').css("background-image","url(images/" + image_loc + ")");
+            $('p#def_name').text("Not set");             
+        }
+            
 }
 
 //--Main Doc ready function
 $(document).ready(function () {
-        $('section.intro').css('display', 'inline-block');
+        $('section.intro').css('display', 'block');
         
         $('section.main').css('display', 'none');
         $('section.builder').css('display', 'none');
@@ -520,6 +714,13 @@ $(document).ready(function () {
         genBuilder();
     });
     
+    //Handle clicking the 'Edit Team' link in Navbar
+    $('a.new_user').click(function (event) {
+        $('section.main').css('display', 'none');
+        $('section.intro').css('display', 'none');
+        $('section.new_account').css('display','block');
+    });
+    
     //Clicking the QB edit button calls the API to get list of available quarterbacks, page to choose them
     //and add back to the user's team
     $('#qb_edit').click(function(event) {
@@ -529,7 +730,7 @@ $(document).ready(function () {
         $('section.intro').css('display', 'none');
         $('section.builder').css('display', 'none');
         
-        $('section.player_edits').css('display', 'inline-block');
+        $('section.player_edits').css('display', 'block');
 
         position = 'qb';
         getNewPlayers(position);
@@ -542,7 +743,7 @@ $(document).ready(function () {
         $('section.intro').css('display', 'none');
         $('section.builder').css('display', 'none');
         
-        $('section.player_edits').css('display', 'inline-block');
+        $('section.player_edits').css('display', 'block');
 
         position = 'rb';
         getNewPlayers(position);
@@ -556,7 +757,7 @@ $(document).ready(function () {
         $('section.intro').css('display', 'none');
         $('section.builder').css('display', 'none');
         
-        $('section.player_edits').css('display', 'inline-block');
+        $('section.player_edits').css('display', 'block');
 
         position = 'wr';
         getNewPlayers(position);
@@ -569,7 +770,7 @@ $(document).ready(function () {
         $('section.intro').css('display', 'none');
         $('section.builder').css('display', 'none');
         
-        $('section.player_edits').css('display', 'inline-block');
+        $('section.player_edits').css('display', 'block');
 
         position = 'def';
         getNewPlayers(position);
@@ -582,7 +783,7 @@ $(document).ready(function () {
         $('section.intro').css('display', 'none');
         $('section.builder').css('display', 'none');
         
-        $('section.player_edits').css('display', 'inline-block');
+        $('section.player_edits').css('display', 'block');
 
         position = 'k';
         getNewPlayers(position);
@@ -598,9 +799,6 @@ $(document).ready(function () {
             choices.push($(this).val());
         });
 
-        
-        console.log(position, choices, choices.length);
-       
        if(position === 'qb') {
             if(choices.length != 1) {
               $('p.error').text("Must choose a quarterback"); 
@@ -610,13 +808,13 @@ $(document).ready(function () {
        } else if(position === 'rb') {
            //test for correct number of choices made for RB's
            if(choices.length != 2) {
-                $('p.error').text("Must choose 2 running backs"); 
+                $('p.error').text("Please choose 2 running backs"); 
            } else {
                 updateUserTeamWithRBID(choices); 
            }
        } else if(position === 'wr') {
             if(choices.length != 3) {
-                $('p.error').text("Must choose 3 wide receivers");
+                $('p.error').text("Please choose 3 wide receivers");
            } else {
                 updateUserTeamWithWRID(choices);
            }

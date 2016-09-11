@@ -29,7 +29,10 @@ var QBSchema = new mongoose.Schema({
     },
     college: {
         type: String,
-    }
+    },
+    link: {
+        type: String,
+    },
 });
 
 var QB = mongoose.model('QB', QBSchema);

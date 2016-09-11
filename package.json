@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/danj707/fantasy-app#readme",
   "dependencies": {
+    "bcrypt": "^0.8.7",
     "bcryptjs": "^2.3.0",
     "body-parser": "^1.15.2",
     "chai": "^3.5.0",

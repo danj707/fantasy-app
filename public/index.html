@@ -1,10 +1,11 @@
-<html>
+<!doctype html>
 
 <header>
     <title>NFL Fantasy Team Builder</title>
     <link href="https://fonts.googleapis.com/css?family=Graduate" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="main.css">
     <link rel='shortcut icon' href='images/favicon.ico' type='image/x-icon'/ >
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 </header>
 
 <body>
@@ -13,7 +14,7 @@
         <h1>Welcome to the NFL Fantasy Team Builder</h1>
         <img src="images/NFL_Draft.png">
 
-        <h3>Login below or signup for a new account.</h3>
+        <h3>Login below to your Fantasy Football account.</h3>
         <form id="login" action="login">
             Returning User:
             <p>
@@ -30,27 +31,40 @@
             <p class="login_error"></p>
             <input type="submit" id="login" value="Login"></input>
         </form>
+            <p><img src="https://www.i9sports.com/images/fullsite/sport-icons/SmallIconSport5.png"><a href="#" class="new_user">New User? - Click to Register a new Fantasy Account</a></p>
+    </section>
+    <!--end of login page section-->
     
-           <p></p>
-        <form id="new_user" action="login">
-            New Account:
+    <!--start of section for new user signup-->
+    <section class="new_account">  
+        <form id="new_user" action="login" method="post">
+            <h3>Welcome to the Fantasy Football Team Builder</h3>
+            <p>Build the fantasy football team of your dreams!</p>
+        
+            <ul id="new_user_details">
+                <li><img src="https://www.i9sports.com/images/fullsite/sport-icons/SmallIconSport5.png">Live Player Data</li>
+                <li><img src="https://www.i9sports.com/images/fullsite/sport-icons/SmallIconSport5.png">Real Players and their Stats</li>
+                <li><img src="https://www.i9sports.com/images/fullsite/sport-icons/SmallIconSport5.png">Customize your Own Team</li>
+                <li><img src="https://www.i9sports.com/images/fullsite/sport-icons/SmallIconSport5.png">Impress your Friends</li>
+            </ul>
+            
+            <p>Choose a username, password (no restrictions on characters, length, etc), and get ready for some football!</p>
             <p>
                 <label id="username">Username:
                     <input type="text" name="new_username" id="new_username" placeholder="username" required></input>
                 </label>
             </p>
-
             <p>
                 <label id="username">Password:
                     <input type="password" name="new_password" id="new_password" placeholder="password" required></input>
                 </label>
             </p>
             <p class="newuser_error"></p>
-            <input type="submit" id="new_user" value="New Account"></input>
+            <input type="submit" id="new_user_signup" value="New Account"></input>
         </form>
         
     </section>
-    <!--end of login page section-->
+    <!--end of section for new user signup-->
 
     <!--start of team builder section-->
     <section class="builder">
@@ -59,16 +73,15 @@
         </div>
 
         <div>
-            <h1>Add/edit your team name:</h1>
+            <h2 id="builder_notify">Add/edit your team name:</h2>
             <form id="team_builder">
                 <label id="teamname">
                     <input type="text" name="teamname" id="teamname" placeholder="teamname" required></input>
                 </label>
         </div>
-        <h1>And pick your team helmet:</h1>
+        <h2>And pick your team helmet:</h2>
 
         <div class="row">
-            
             <label id="black"><div class="helmet"><img class="helmet_size" src="images/black-helmet.jpg">
                 <p>
                     <input type="radio" class="helmet" name="helmet" value="black" id="black">
@@ -95,7 +108,6 @@
         </div>
 
         <div class="row">
-            
             <label id="purple"><div class="helmet"><img class="helmet_size" src="images/purple-helmet.jpg">
                 <p>
                     <input type="radio" class="helmet" name="helmet" value="purple" id="purple">
@@ -122,7 +134,6 @@
         </div>
         
         <div><p class="error"></p></div>
-
         <div>
             <label id="team_build_form">
                 <input type="submit" value="Make/Edit My Team" id="team_build_form"></input>
@@ -131,7 +142,6 @@
         </div>
     </section>
     <!--end of team builder section-->
-
 
     <!--start of main page section-->
     <section class="main">
@@ -145,95 +155,89 @@
             <h1 class="teamname">My team name</h1>
 
             <div class="qb_position">
-                <p>Quarterback</p>
-                <p id="qb_name">Name:</p>
-                <p id="qb_jersey">Jersey:</p>
-                <p id="qb_team">Team:</p>
-                <p id="qb_height">Height:</p>
-                <p id="qb_weight">Weight:</p>
-                <p id="qb_college">College:</p>
-
-                
-                <input type="button" id="qb_edit" value="Edit/Add">
+                <p class="pos_title">Quarterback</p>
+                <p id="qb_name"></p>
+                <p id="qb_team"></p>
+                <p id="qb_stats"></p>
+                <p id="qb_college"></p>
+                <input type="button" id="qb_edit" value="Edit/Add QB's">
             </div>
 
-            <!--<div class="chat">Sports Chat:</div>-->
-
             <div class="rb1_position">
-                <p>Running Back #1</p>
-                <p id="rb1_pid">PID:</p>
-                <p id="rb1_name">Name:</p>
-                <p id="rb1_team">Team:</p>
-                <p id="rb1_jersey">Jersey:</p>
-                <p id="rb1_ypc">YPC:</p>
+                <p class="pos_title">Running Back #1</p>
+                <p id="rb1_name"></p>
+                <p id="rb1_team"></p>
+                <p id="rb1_stats">:</p>
+                <p id="rb1_college"></p>
             </div>
 
             <div class="rb2_position">
-                <p>Running Back #2</p>
-                <p id="rb2_pid">PID:</p>                
-                <p id="rb2_name">Name:</p>
-                <p id="rb2_team">Team:</p>
-                <p id="rb2_jersey">Jersey:</p>
-                <p id="rb2_ypc">YPC:</p>
-                
+                <p class="pos_title">Running Back #2</p>
+                <p id="rb2_name"></p>
+                <p id="rb2_team"></p>
+                <p id="rb2_stats"></p>
+                <p id="rb2_college"></p>
+            </div>
+
+            <div>
                 <form id="rb_edit">
-                    <input type="submit" id="rb_edit" value="Edit/Add">
+                    <input type="submit" id="rb_edit" value="Edit/Add RB's">
                 </form>
             </div>
 
             <div class="wr1_position">
-                <p>Wide Receiver #1</p>
-                <p id="wr1_pid">PID:</p>                
-                <p id="wr1_name">Name:</p>
-                <p id="wr1_team">Team:</p>
-                <p id="wr1_jersey">Jersey:</p>
-                <p id="wr1_qbr">QBR:</p>
+                <p class="pos_title">Wide Receiver #1</p>
+                <p id="wr1_name"></p>
+                <p id="wr1_team"></p>
+                <p id="wr1_stats"></p>
+                <p id="wr1_college"></p>
             </div>
 
             <div class="wr2_position">
-                <p>Wide Receiver #2</p>
-                <p id="wr2_pid">PID:</p>
-                <p id="wr2_name">Name:</p>
-                <p id="wr2_team">Team:</p>
-                <p id="wr2_jersey">Jersey:</p>
-                <p id="wr2_qbr">QBR:</p>
+                <p class="pos_title">Wide Receiver #2</p>
+                <p id="wr2_name"></p>
+                <p id="wr2_team"></p>
+                <p id="wr2_stats"></p>
+                <p id="wr2_college"></p>
             </div>
 
             <div class="wr3_position">
-                <p>Wide Receiver #3</p>
-                <p id="wr3_pid">PID:</p>
-                <p id="wr3_name">Name:</p>
-                <p id="wr3_team">Team:</p>
-                <p id="wr3_jersey">Jersey:</p>
-                <p id="wr3_qbr">QBR:</p>
-                
+                <p class="pos_title">Wide Receiver #3</p>
+                <p id="wr3_name"></p>
+                <p id="wr3_team"></p>
+                <p id="wr3_stats"></p>
+                <p id="wr3_college"></p>
+            </div>
+            
+            <div>
                 <form id="wr_edit">
-                    <input type="submit" id="wr_edit" value="Edit/Add">
+                    <input type="submit" id="wr_edit" value="Edit/Add WR's">
                 </form>
             </div>
 
-            <div class="k_position">Kicker
-                <p>Kicker</p>
-                <p id="k_pid">PID:</p>
+            <div class="k_position">
+                <p class="pos_title">Kicker</p>
                 <p id="k_name">Name:</p>
+                <p id="k_team"></p>
+                <p id="k_stats"></p>
+                <p id="k_college"></p>
+            </div>
+            <div>
                 <form id="k_edit">
-                    <input type="submit" id="k_edit" value="Edit/Add">
+                    <input type="submit" id="k_edit" value="Edit/Add K's">
                 </form>
             </div>
 
-            <div class="def_position">Defense
-                <p>Defense</p>
-                <p id="def_pid">PID:</p>
-                <p id="defense"></p>
+            <div class="def_position">
+                <p class="pos_title">Defense</p>
+                <p id="def_name"></p>
+                <p id="def_team"></p>
+            </div>
+            <div>
                 <form id="def_edit">
-                    <input type="submit" id="def_edit" value="Edit/Add">
+                    <input type="submit" id="def_edit" value="Edit/Add Defense">
                 </form>
             </div>
-
-        </div>
-        
-        <div class="ticker">
-            Insert FF ticker here - TODO
         </div>
     </section>
     <!--end of main page section-->
@@ -241,34 +245,26 @@
 
     <!--Player Edit Section-->
     <section class="player_edits">
-        Roster Player Selection/Update:
+        <img src="https://www.i9sports.com/images/fullsite/sport-icons/SmallIconSport5.png">
+        <h2 class="header">Roster Player Selection/Update:</h2>
+        <img src="https://www.i9sports.com/images/fullsite/sport-icons/SmallIconSport5.png">
         
         <p class="error"></p>
-        
         <div class="player_list">
             <form id="player_update">
-                
-    
-            <p>Choose a player below to add or update. Your previous choice (if any) is automatically selected.</p>
+            <p>Choose one or more players below to add to your fantasy team.</p>
             <p id="notes"></p>
-            <ul id="player_list">
-                <li class="playerlist">
+            <ul class="player_list">
             </ul>
-
             <input type="submit" value="Update Roster">
             <input type="reset" value="Reset">
             </form>
-            
         </div>
-        
     </section>
     <!--End of Player Edit Section-->
 
-
-    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script type="text/javascript" src="app.js"></script>
 
 </body>
-
 </html>

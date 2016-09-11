@@ -1,21 +1,19 @@
 /*Main Definitions*/
 
-
-
-/** {*/
-/*    border: 1px solid red;*/
-/*}*/
-
 body {
     background-image: url("images/bg.jpg");
     background-repeat: no-repeat;
     background-size: auto;
+    margin:0;
 }
-
 
 html {
     font-family: 'Graduate', cursive;
     box-sizing: border-box;
+}
+
+font-awesome {
+    font-family: FontAwesome, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 h1 {
@@ -31,32 +29,20 @@ h2 {
 
 h3 {
     color:white;
-}
-
-button input[type=submit] {
-    padding:5px 15px; 
-    background:#ccc; 
-    cursor:pointer;
-    font-size:12px;
-    border-radius: 5px; 
+    font-weight:bold;
+    text-decoration:underline;
+    font-size:20px;
 }
 
 section.main {
     text-align: center;
+    padding:5px;
 }
 
 div.helmet {
     display: inline-block;
     width: 20%;
     text-align: center;
-}
-
-div.chat {
-    width: 20%;
-    height: 100%;
-    float: right;
-    background: white;
-    border: 1px ridge black;
 }
 
 div.radio {
@@ -69,17 +55,6 @@ div.row {
     margin: auto;
 }
 
-div.ticker {
-    align-content: center;
-    display: inherit;
-    width: 80%;
-    margin:auto;
-    background: white;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    border: 1px ridge black;
-}
-
 div.nav {
     display: inline-block;
     vertical-align: middle;
@@ -88,37 +63,121 @@ div.nav {
     text-align: center;
 }
 
+div.teaminfo {
+    align-content: center;
+    width: 75%;
+    padding:10px;
+    display: inline-block;
+    background: lightgray;
+    border:5px ridge DimGray;
+}
+
+input[type=submit] {
+    margin:10px;
+    padding:10px;
+    background:#ccc; 
+    cursor:pointer;
+    font-size:12px;
+    border-radius: 5px; 
+}
+
+input[type=button] {
+    padding:10px;
+    margin:10px;
+    background:#ccc; 
+    cursor:pointer;
+    font-size:12px;
+    border-radius: 5px; 
+}
+
+input[type=reset],
+button[type=reset] {
+    padding:10px;
+    margin:10px;
+    background:#ccc; 
+    cursor:pointer;
+    font-size:12px;
+    border-radius: 5px; 
+}
+
+.teamname {
+    color:black;
+}
+
+.ticker {
+    align-content: center;
+    display: inherit;
+    width: 75%;
+    margin:auto;
+    background: lightgray;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border: 1px ridge black;
+}
+
 .qb_position {
     border: 5px ridge darkgray;
     padding: 5px;
-    background:lightblue;
+    display:block;
+    font-style: oblique;
+    color:black;
+    background-size:cover;
+    background-repeat:no-repeat;
+}
+
+.pos_title {
+    text-decoration:underline;
+    font-weight:bold;
 }
 
 .rb1_position,
 .rb2_position {
     border: 5px ridge darkgray;
     padding: 5px;
-    background:lightsalmon;
+    /*background:lightsalmon;*/
+    display:inline-block;
+    width:46%;
+    margin:10px;
+    height:auto;
+    align-content:center;
+    text-align:center;
+    background-size:cover;
+    background-repeat:no-repeat;
 }
 
 .wr1_position,
 .wr2_position,
 .wr3_position {
     border: 5px ridge darkgray;
+    margin:10px;
     padding: 5px;
-    background:lightskyblue;
+    width:30%;
+    margin:auto;
+    display:inline-block;
+    background-size:cover;
+    background-repeat:no-repeat;
 }
 
-div.teaminfo {
-    align-content: center;
-    width: 80%;
-    display: inline-block;
-    background: lightgray;
+.k_position,
+.def_position {
+    margin:10px;
+    border:5px ridge darkgray;
+    width:80%;
+    margin:auto;
+    padding:5px;
+    background-size:cover;
+    background-repeat:no-repeat;
 }
 
-div.player_list {
-    overflow:auto;
-    height:500px;
+.player_list {
+    /*overflow:auto;*/
+    /*height:500px;*/
+    padding:10px;
+    list-style:none;
+}
+
+.indiv_players {
+    border:1px solid;
     padding:10px;
 }
 
@@ -127,47 +186,20 @@ div.player_list {
     color:red;
 }
 
-/*ID Rules*/
-
-#builder {
-    color:white;
-}
-
-#player_list {
-    padding:5px;
-    list-style: none;
-}
-
-#login {
-    width: 40%;
-    border-radius: 5px;
-    background: lightgray;
-    padding: 15px;
-    margin: auto;
-    overflow-wrap: normal;
-}
-
-
-
-#new_user {
-    width: 40%;
-    border-radius: 5px;
-    background: lightgray;
-    padding: 15px;
-    margin: auto;
-    overflow-wrap: normal;
-}
-
-/*CLASS RULES*/
-
 .small {
     width: 10%;
     height: auto;
 }
 
+.header {
+    size:24px;
+    text-decoration:underline;
+}
+
 .helmet_size {
-    width: 60%;
+    width: 50%;
     height: auto;
+    border:1px solid;
 }
 
 img.helmet_logo {
@@ -181,16 +213,67 @@ img.helmet_logo {
     width: 150px;
 }
 
+/*ID Rules*/
+
+#new_user {
+    color:white;
+    font-size:16px;    
+}
+
+#builder {
+    color:white;
+}
+
+#new_user_details {
+    text-align:center;
+    list-style:none;
+    padding-left:0px;
+    padding-top:10px;
+    padding-bottom:10px;
+    color:black;
+}
+
+#outlink {
+    text-decoration:none;
+}
+
+#login {
+    width: 40%;
+    border-radius: 5px;
+    background: lightgray;
+    padding: 15px;
+    margin: auto;
+    overflow-wrap: normal;
+}
+
+#new_user {
+    width: 80%;
+    border-radius: 5px;
+    background: lightgray;
+    padding: 15px;
+    margin: auto;
+    overflow-wrap: normal;
+    border:3px ridge DimGray;
+}
 
 /*SECTIONS*/
-
-
 /*FIRST PAGE, LOGIN*/
 
 .intro {
+    padding-top:25px;
     text-align: center;
     margin: auto;
     width: 80%;
+}
+
+/*NEW ACCOUNT SIGNUP PAGE*/
+
+.new_account {
+    width:50%;
+    display:none;
+    text-align:center;
+    margin:auto;
+    padding-top:20px;
 }
 
 /*TEAM BUILDER PAGE - 2ND PAGE*/
@@ -202,6 +285,7 @@ img.helmet_logo {
     background:lightgray;
     padding:10px;
     margin:auto;
+    border:3px ridge DimGray;
 }
 
 /*MAIN DISPLAY PAGE*/
@@ -214,14 +298,14 @@ img.helmet_logo {
 
 /*Player Editing Page*/
 .player_edits {
-    display:inline-block;
+    display:block;
     text-align: center;
-    width: 80%;
+    width: 50%;
     border-radius:3px;
-    background:lightgray;
+    background:lightblue;
     margin:auto;
     padding:10px;
+    border:3px ridge DimGray;
+
 }
-
-
 /*END SECTIONS*/

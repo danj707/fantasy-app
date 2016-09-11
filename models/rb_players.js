@@ -29,7 +29,10 @@ var RBSchema = new mongoose.Schema({
     },
     college: {
         type: String,
-    }
+    },
+    link: {
+        type: String,
+    },
 });
 
 var RB = mongoose.model('RB', RBSchema);

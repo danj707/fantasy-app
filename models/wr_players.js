@@ -29,7 +29,10 @@ var WRSchema = new mongoose.Schema({
     },
     college: {
         type: String,
-    }
+    },
+    link: {
+        type: String,
+    },
 });
 
 var WR = mongoose.model('WR', WRSchema);
