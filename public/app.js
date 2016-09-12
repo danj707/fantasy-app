@@ -3,18 +3,28 @@
 /* global $ */
 
 //--Sets global project name in api call, useful if we change servers, etc
-var projectURL = 'https://fantasy-app-danj707.c9users.io:8080';
+var projectURL = 'https://fantasy-app-danj707.c9users.io';
 
 //--Define globals to be set after user logs in or signs up, removes need to
 //pass around result object
+
 var user_name;
 var user_id;
 var team_name;
 var team_id;
 var current_helmet;
 var position;
+var qb_pid;
+var rb1_pid;
+var rb2_pid;
+var wr1_pid;
+var wr2_pid;
+var wr3_pid;
+var k_pid;
+var def_pid;
 
-//List of NFL teams, and their nfl logo images
+//Object array of NFL teams, and their nfl logo images
+
 var nflTEAMS = {
     BAL : ["bal.png"],
     CIN: ["cin.png"],
@@ -124,14 +134,6 @@ function getTeam() {
     
     //define function scope variables to hold the id's/keys of the players in their respective collections
     //used after the getTeam call to make specific api calls to DB for additional player information
-    var qid;
-    var rb1id;
-    var rb2id;
-    var wr1id;
-    var wr2id;
-    var wr3id;
-    var kid;
-    var defid;
     var rosterArray = [];
     
     $.ajax({
@@ -143,54 +145,54 @@ function getTeam() {
             if(result) {
                 team_id = result._id;
                 current_helmet = result.helmet;
-                qid = result.QB;
-                rb1id = result.RB1;
-                rb2id = result.RB2;
-                wr1id = result.WR1;
-                wr2id = result.WR2;
-                wr3id = result.WR3;
-                kid = result.K;
-                defid = result.DEF;
+                qb_pid = result.QB;
+                rb1_pid = result.RB1;
+                rb2_pid = result.RB2;
+                wr1_pid = result.WR1;
+                wr2_pid = result.WR2;
+                wr3_pid = result.WR3;
+                k_pid = result.K;
+                def_pid = result.DEF;
                 
                 $.when( 
                     $.ajax({
                             type:"GET",
-                            url:projectURL + "/players/qb/" + qid,
+                            url:projectURL + "/players/qb/" + qb_pid,
                             dataType:'json',
                         }),
                     $.ajax({
                             type:"GET",
-                            url:projectURL + "/players/rb/" + rb1id,
+                            url:projectURL + "/players/rb/" + rb1_pid,
                             dataType:'json',
                         }),
                     $.ajax({
                             type:"GET",
-                            url:projectURL + "/players/rb/" + rb2id,
+                            url:projectURL + "/players/rb/" + rb2_pid,
                             dataType:'json',
                         }),
                     $.ajax({
                             type:"GET",
-                            url:projectURL + "/players/wr/" + wr1id,
+                            url:projectURL + "/players/wr/" + wr1_pid,
                             dataType:'json',
                         }),
                     $.ajax({
                             type:"GET",
-                            url:projectURL + "/players/wr/" + wr2id,
+                            url:projectURL + "/players/wr/" + wr2_pid,
                             dataType:'json',
                         }),
                     $.ajax({
                             type:"GET",
-                            url:projectURL + "/players/wr/" + wr3id,
+                            url:projectURL + "/players/wr/" + wr3_pid,
                             dataType:'json',
                         }),
                     $.ajax({
                             type:"GET",
-                            url:projectURL + "/players/k/" + kid,
+                            url:projectURL + "/players/k/" + k_pid,
                             dataType:'json',
                         }),
                     $.ajax({
                             type:"GET",
-                            url:projectURL + "/players/def/" + defid,
+                            url:projectURL + "/players/def/" + def_pid,
                             dataType:'json',
                         })
                         )
@@ -244,10 +246,10 @@ function updateUserTeam(team_name) {
             type:'PUT',
             data:q_string
         })
-        .done(function (result) { //this waits for the ajax to return with a succesful promise object
+        .done(function (result) { 
             mainDisplay();
         })
-        .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
+        .fail(function (jqXHR, error) { 
             console.log("Update teamname failed!");
         });    
 }
@@ -260,14 +262,13 @@ function updateUserTeamWithQBID(player_choice) {
             type:'PUT',
             data:q_string
         })
-        .done(function (result) { //this waits for the ajax to return with a succesful promise object
-            console.log("Updated " + position + " in team roster succeeded!");
+        .done(function (result) { 
+            qb_pid = player_choice;
             position = '';
             mainDisplay();
         })
-        .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
+        .fail(function (jqXHR, error) { 
             //TODO - add user error message here
-            console.log("Updated " + position + " in team roster failed!");
             position = '';
         });    
 }
@@ -280,11 +281,13 @@ function updateUserTeamWithRBID(choices) {
             type:'PUT',
             data:q_string
         })
-        .done(function (result) { //this waits for the ajax to return with a succesful promise object
+        .done(function (result) { 
+            rb1_pid = choices[0];
+            rb2_pid = choices[1];
             position = '';
             mainDisplay();
         })
-        .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
+        .fail(function (jqXHR, error) { 
             position = '';
         });    
 }
@@ -297,11 +300,14 @@ function updateUserTeamWithWRID(choices) {
             type:'PUT',
             data:q_string
         })
-        .done(function (result) { //this waits for the ajax to return with a succesful promise object
+        .done(function (result) { 
+            wr1_pid = choices[0];
+            wr2_pid = choices[1];
+            wr3_pid = choices[2];
             position = '';
             mainDisplay();
         })
-        .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
+        .fail(function (jqXHR, error) { 
             position = '';
         });    
 }
@@ -314,11 +320,12 @@ function updateUserTeamWithKID(choices) {
             type:'PUT',
             data:q_string
         })
-        .done(function (result) { //this waits for the ajax to return with a succesful promise object
+        .done(function (result) {
+            k_pid = choices[0];
             position = '';
             mainDisplay();
         })
-        .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
+        .fail(function (jqXHR, error) { 
             position = '';
         });    
 }
@@ -331,11 +338,12 @@ function updateUserTeamWithDEFID(choices) {
             type:'PUT',
             data:q_string
         })
-        .done(function (result) { //this waits for the ajax to return with a succesful promise object
+        .done(function (result) { 
+            def_pid = choices[0];
             position = '';
             mainDisplay();
         })
-        .fail(function (jqXHR, error) { //this waits for the ajax to return with an error promise object
+        .fail(function (jqXHR, error) { 
             position = '';
         });    
 }
@@ -399,37 +407,71 @@ function playerUpdatePage(result,position) {
             var real_team = result[i].real_team;
 
             if(position === 'qb') {
+                var checked='';
+                if(qb_pid === result[i].qb_pid) {
+                    checked = 'checked';
+                }
                 var position_pid = result[i].qb_pid;
                 $('p#notes').text("Pick one quarterback.");
                 if(result[i].link) {
-                    $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='radio' name='player' value=" + position_pid + "></input><a id='outlink' href=" + result[i].link + " target=_blank>NFL.Com Stats-<i class='fa fa-external-link' aria-hidden='true'></a></i></li></label>");
+                    $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='radio' name='player' value=" + position_pid + ' ' + checked + "></input><a id='outlink' href=" + result[i].link + " target=_blank>NFL.Com Stats-<i class='fa fa-external-link' aria-hidden='true'></a></i></li></label>");
                 } else {
-                    $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='radio' name='player' value=" + position_pid + "></input></li></label>");
+                    $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='radio' name='player' value=" + position_pid + ' ' + checked + "></input></li></label>");
                 }
             } else if (position === 'rb') {
+                var checked='';
+                var checked2 = '';
+                    
+                if(rb1_pid === result[i].rb_pid) {
+                    checked = 'checked';
+                }    
+                if(rb2_pid === result[i].rb_pid) {
+                    checked2 = 'checked';
+                }
                 var position_pid = result[i].rb_pid;
                 $('p#notes').text("Pick two runningbacks.");
                 if(result[i].link) {
-                    $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + "></input><a id='outlink' href=" + result[i].link + " target=_blank>NFL.Com Stats-<i class='fa fa-external-link' aria-hidden='true'></a></i></li></label>");
+                    $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + ' ' + checked + checked2 + "></input><a id='outlink' href=" + result[i].link + " target=_blank>NFL.Com Stats-<i class='fa fa-external-link' aria-hidden='true'></a></i></li></label>");
                 } else {
-                    $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + "></input></li></label>");
+                    $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + ' ' + checked + checked2 + "></input></li></label>");
                 }
             } else if (position === 'wr') {
+                var checked='';
+                var checked2 = '';
+                var checked3 = '';
+                    
+                if(wr1_pid === result[i].wr_pid) {
+                    checked = 'checked';
+                }    
+                if(wr2_pid === result[i].wr_pid) {
+                    checked2 = 'checked';
+                }     
+                if(wr3_pid === result[i].wr_pid) {
+                    checked3 = 'checked';
+                }
                 var position_pid = result[i].wr_pid;
                 $('p#notes').text("Pick three wide receivers.");
                 if(result[i].link) {
-                    $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + "></input><a id='outlink' href=" + result[i].link + " target=_blank>NFL.Com Stats-<i class='fa fa-external-link' aria-hidden='true'></a></i></li></label>");
+                    $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + ' ' + checked + checked2 + checked3 + "></input><a id='outlink' href=" + result[i].link + " target=_blank>NFL.Com Stats-<i class='fa fa-external-link' aria-hidden='true'></a></i></li></label>");
                 } else {
-                    $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + "></input></li></label>");
+                    $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + ' ' + checked + checked2 + checked3 + "></input></li></label>");
                 }
             } else if (position === 'k') {
+                var checked='';
+                if(k_pid === result[i].k_pid) {
+                    checked = 'checked';
+                }    
                 var position_pid = result[i].k_pid;
                 $('p#notes').text("Pick one kicker.");
-                $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + "></input></li></label>");
+                $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + ' ' + checked + "></input></li></label>");
             } else if (position === 'def') {
+                var checked='';
+                if(def_pid === result[i].def_pid) {
+                    checked = 'checked';
+                }   
                 var position_pid = result[i].def_pid; 
                 $('p#notes').text("Pick one defense.");
-                $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + "></input></li></label>");
+                $('ul.player_list').append("<label id='player_update'><li class=indiv_players>" + name + " - " + real_team + "<input type='checkbox' name='player' value=" + position_pid + ' ' + checked + "></input></li></label>");
             }
         }
 

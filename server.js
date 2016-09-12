@@ -125,6 +125,8 @@ app.get('/teams/:team_name', function(req, res) {
 
 //CREATE a new team by name and add PID's by value
 app.post('/teams', function(req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     Team.create({
         team_name: req.body.team_name,
         user_id: req.body.user_id,
@@ -294,7 +296,7 @@ app.delete('/teams/:id', function(req,res) {
 
 //////////------Users Endpoints------//////////////////////////////
 
-//GET route, displays a list of all the items in DB
+//GET route, displays a list of all the users in DB
 app.get('/users', function(req, res) {
     User.find(function(err, items) {
         if (err) {
