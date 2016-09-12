@@ -28,7 +28,6 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-app.set('port', (process.env.PORT || 5000));
 
 var runServer = function(callback) {
     mongoose.connect(config.DATABASE_URL, function(err) {
