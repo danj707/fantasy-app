@@ -3,7 +3,7 @@
 /* global $ */
 
 //--Sets global project name in api call, useful if we change servers, etc
-var projectURL = 'https://fantasy-app-danj707.c9users.io';
+//var projectURL = 'https://fantasy-app-danj707.c9users.io'; - Depreciated
 
 //--Define globals to be set after user logs in or signs up, removes need to
 //pass around result object
@@ -71,7 +71,7 @@ function loginUser(username, password) {
     };
     $.ajax({
             type:"POST",
-            url:projectURL + "/login",
+            url:"/login",
             data: q_string,
             dataType:'json',
         })
@@ -103,7 +103,7 @@ function newUser(username, password) {
     };    
     $.ajax({
             type:"POST",
-            url:projectURL + "/users/create",
+            url:"/users/create",
             data: q_string,
             dataType:'json',
         })
@@ -138,7 +138,7 @@ function getTeam() {
     
     $.ajax({
             type:"GET",
-            url:projectURL + "/teams/" + team_name,
+            url:"/teams/" + team_name,
             dataType:'json',
         })
         .done(function (result) {
@@ -157,42 +157,42 @@ function getTeam() {
                 $.when( 
                     $.ajax({
                             type:"GET",
-                            url:projectURL + "/players/qb/" + qb_pid,
+                            url:"/players/qb/" + qb_pid,
                             dataType:'json',
                         }),
                     $.ajax({
                             type:"GET",
-                            url:projectURL + "/players/rb/" + rb1_pid,
+                            url:"/players/rb/" + rb1_pid,
                             dataType:'json',
                         }),
                     $.ajax({
                             type:"GET",
-                            url:projectURL + "/players/rb/" + rb2_pid,
+                            url:"/players/rb/" + rb2_pid,
                             dataType:'json',
                         }),
                     $.ajax({
                             type:"GET",
-                            url:projectURL + "/players/wr/" + wr1_pid,
+                            url:"/players/wr/" + wr1_pid,
                             dataType:'json',
                         }),
                     $.ajax({
                             type:"GET",
-                            url:projectURL + "/players/wr/" + wr2_pid,
+                            url:"/players/wr/" + wr2_pid,
                             dataType:'json',
                         }),
                     $.ajax({
                             type:"GET",
-                            url:projectURL + "/players/wr/" + wr3_pid,
+                            url:"/players/wr/" + wr3_pid,
                             dataType:'json',
                         }),
                     $.ajax({
                             type:"GET",
-                            url:projectURL + "/players/k/" + k_pid,
+                            url:"/players/k/" + k_pid,
                             dataType:'json',
                         }),
                     $.ajax({
                             type:"GET",
-                            url:projectURL + "/players/def/" + def_pid,
+                            url:"/players/def/" + def_pid,
                             dataType:'json',
                         })
                         )
@@ -217,7 +217,7 @@ function createTeam(teamname,helmet) {
     //Create a query string from a combination of form data and global variables
     var q_string = "team_name=" + teamname + "&user_name=" + user_name + "&user_id=" + user_id + "&helmet=" + helmet;
     $.ajax({
-            url:projectURL + "/teams",
+            url:"/teams",
             type:'POST',
             data:q_string,
         })
@@ -242,7 +242,7 @@ function createTeam(teamname,helmet) {
 function updateUserTeam(team_name) {
     var q_string = "user_id=" + user_id + "&team_name=" + team_name;
     $.ajax({
-            url:projectURL + "/users/team",
+            url:"/users/team",
             type:'PUT',
             data:q_string
         })
@@ -258,7 +258,7 @@ function updateUserTeam(team_name) {
 function updateUserTeamWithQBID(player_choice) {
     var q_string = "team_id=" + team_id + "&qb_pid=" + player_choice;
     $.ajax({
-            url:projectURL + "/team/roster/qb",
+            url:"/team/roster/qb",
             type:'PUT',
             data:q_string
         })
@@ -277,7 +277,7 @@ function updateUserTeamWithQBID(player_choice) {
 function updateUserTeamWithRBID(choices) {
     var q_string = "team_id=" + team_id + "&rb1_pid=" + choices[0] + "&rb2_pid=" + choices[1];
     $.ajax({
-            url:projectURL + "/team/roster/rb",
+            url:"/team/roster/rb",
             type:'PUT',
             data:q_string
         })
@@ -296,7 +296,7 @@ function updateUserTeamWithRBID(choices) {
 function updateUserTeamWithWRID(choices) {
     var q_string = "team_id=" + team_id + "&wr1_pid=" + choices[0] + "&wr2_pid=" + choices[1] + "&wr3_pid=" + choices[2];
     $.ajax({
-            url:projectURL + "/team/roster/wr",
+            url:"/team/roster/wr",
             type:'PUT',
             data:q_string
         })
@@ -316,7 +316,7 @@ function updateUserTeamWithWRID(choices) {
 function updateUserTeamWithKID(choices) {
     var q_string = "team_id=" + team_id + "&k_pid=" + choices[0];
     $.ajax({
-            url:projectURL + "/team/roster/k",
+            url:"/team/roster/k",
             type:'PUT',
             data:q_string
         })
@@ -334,7 +334,7 @@ function updateUserTeamWithKID(choices) {
 function updateUserTeamWithDEFID(choices) {
     var q_string = "team_id=" + team_id + "&def_pid=" + choices[0];
     $.ajax({
-            url:projectURL + "/team/roster/def",
+            url:"/team/roster/def",
             type:'PUT',
             data:q_string
         })
@@ -353,7 +353,7 @@ function editTeam(teamname,helmet) {
     //Gets the new team name and helmet choice from the form input
     var q_string = "team_id=" + team_id + "&team_name=" + teamname + "&helmet=" + helmet;
     $.ajax({
-            url:projectURL + "/team",
+            url:"/team",
             type:'PUT',
             data:q_string
         })
@@ -378,7 +378,7 @@ function editTeam(teamname,helmet) {
 function getNewPlayers(position) {
     $.ajax({
             type:"GET",
-            url:projectURL + "/players/" + position,
+            url:"/players/" + position,
             dataType:'json',
         })
         .done(function (result) {
