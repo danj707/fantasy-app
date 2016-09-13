@@ -11,9 +11,7 @@ var UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    team_name: {
-        type: String,
-    }
+    team_name: String,
 });
 
 UserSchema.methods.validatePassword = function(password, callback) {
