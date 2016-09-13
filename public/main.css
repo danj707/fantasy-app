@@ -1,7 +1,7 @@
 /*Main Definitions*/
 
 body {
-    background-image: url("images/bg.jpg");
+    background-image: url('images/bg.jpg');
     background-repeat: no-repeat;
     background-size: auto;
     margin:0;
@@ -130,11 +130,15 @@ button[type=reset] {
     font-weight:bold;
 }
 
+a:link,
+a:visited {
+    color:black;  
+}
+
 .rb1_position,
 .rb2_position {
     border: 5px ridge darkgray;
     padding: 5px;
-    /*background:lightsalmon;*/
     display:inline-block;
     width:46%;
     margin:10px;
@@ -170,8 +174,6 @@ button[type=reset] {
 }
 
 .player_list {
-    /*overflow:auto;*/
-    /*height:500px;*/
     padding:10px;
     list-style:none;
 }

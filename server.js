@@ -83,6 +83,7 @@ app.post('/login', function(req, res) {
                                         message: 'Not found'
                                     });
                             } else {
+                                console.log("User: " + uname + " logged in.")
                                 return res.json(items);
                             }
                             //return something here
@@ -141,11 +142,16 @@ app.post('/teams', function(req, res) {
         K:'',
         DEF:''
     }, function(err, item) {
+        console.log(err);
+        console.log(item);
         if (err) {
+            console.log(err);
+            console.log(item);
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
         }
+        console.log("Team: " + req.body.team_name + " created.");
         return res.json(item);
     });
 });
@@ -381,6 +387,7 @@ app.post('/users/create', function(req, res) {
                 });
             }
             if(item) {
+                console.log("User: " + username + " created.");
                 return res.json(item);
             }
         });

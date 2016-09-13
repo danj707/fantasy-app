@@ -213,7 +213,7 @@ function getTeam() {
 
 //--createTeam API creates team in team table, called from Team Builder
 //--Also calls API updateUserTeam after, to insert the team name into the user record
-function createTeam(teamname,helmet) {
+function createTeam(teamname, helmet) {
     //Create a query string from a combination of form data and global variables
     var q_string = "team_name=" + teamname + "&user_name=" + user_name + "&user_id=" + user_id + "&helmet=" + helmet;
     $.ajax({
@@ -349,7 +349,7 @@ function updateUserTeamWithDEFID(choices) {
 }
 
 //--editTeam API to update the team name and helmet choice
-function editTeam(teamname,helmet) {
+function editTeam(teamname, helmet) {
     //Gets the new team name and helmet choice from the form input
     var q_string = "team_id=" + team_id + "&team_name=" + teamname + "&helmet=" + helmet;
     $.ajax({
@@ -361,10 +361,8 @@ function editTeam(teamname,helmet) {
             //Update succeeded, update the teamname and new helmet choice
             team_name = teamname;
             current_helmet = helmet;
-            
             //If successful, also update the user record with the new helmet and team name
             updateUserTeam(team_name);
-            
             //Display the main page
             mainDisplay(result);
         })
@@ -399,7 +397,7 @@ function getNewPlayers(position) {
 
 //--Display the player update page, generic for position, etc.  Displays form handler for adding/updating players
 //--to team roster
-function playerUpdatePage(result,position) {
+function playerUpdatePage(result, position) {
         $('ul.player_list').empty();
         for(var i=0;i<result.length;i++) {
             
