@@ -92,9 +92,18 @@ app.post('/login', function(req, res) {
                 });
 });
 
+///////////----Logout route----------/////////////////////////////
+app.get('/logout', function(req, res){
+    req.logout();
+    res.redirect('/');
+});
+
+
 ///////////-----Teams Endpoints------/////////////////////////////
 
+
 //GET, displays a list of all the items in DB
+var schema = 'Team';
 app.get('/teams', function(req, res) {
     Team.find(function(err, items) {
         if (err) {
